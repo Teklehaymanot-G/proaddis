@@ -8,46 +8,75 @@ const Clients = () => {
   // Sample client logos - replace with actual client logos from your PDF
   const clients = [
     {
-      name: "Warka Academy Strength Co. Ltd",
-      logo: "warka.png", // Add actual logo
+      name: "Warka Academy",
+      logo: "warka.png",
       category: "Education",
       project: "Complete Branding & Marketing Strategy",
     },
     {
-      name: "Picnia Tarjt Grace Trading",
-      logo: "/images/clients/grace-trading-logo.png",
-      category: "Trading",
+      name: "Abay Esdee Paints",
+      logo: "abay.png",
+      category: "Manufacturing",
       project: "Distribution Strategy & Digital Advertising",
     },
     {
-      name: "La Puppy Arridge Paints",
-      logo: "/images/clients/la-puppy-logo.png",
-      category: "Manufacturing",
+      name: "Little Limited",
+      logo: "little.png",
+      category: "Transportation",
       project: "Packaging Design & Traditional Advertising",
     },
     {
-      name: "Abay Esdee Paints",
-      logo: "/images/clients/abay-esdee-logo.png",
-      category: "Manufacturing",
+      name: "Tranquil Forwarding",
+      logo: "tranquil.jpg",
+      category: "Transportation",
       project: "Brand Identity & Market Positioning",
     },
     {
-      name: "Deals to Addis",
-      logo: "/images/clients/deals-to-addis-logo.png",
-      category: "E-commerce",
+      name: "Visa",
+      logo: "visa.png",
+      category: "Finance",
       project: "E-commerce Development & Digital Marketing",
     },
-    // Add more actual clients from your PDF
+    {
+      name: "Bank of Abyssinia",
+      logo: "BOA.png",
+      category: "Finance",
+      project: "E-commerce Development & Digital Marketing",
+    },
+    {
+      name: "Sika Chemical Engineering",
+      logo: "sika.jpg",
+      category: "Manufacturing",
+      project: "E-commerce Development & Digital Marketing",
+    },
+    {
+      name: "Alema Farms",
+      logo: "alema farms.jpg",
+      category: "Agro Industry",
+      project: "E-commerce Development & Digital Marketing",
+    },
+    {
+      name: "E-Mecce Agro",
+      logo: "e mecce agro.png",
+      category: "Agro Industry",
+      project: "E-commerce Development & Digital Marketing",
+    },
+    {
+      name: "Dreamliner Hotel",
+      logo: "dreamliner.webp",
+      category: "Hotel",
+      project: "E-commerce Development & Digital Marketing",
+    },
   ];
 
   const categories = [
     "All",
     "Education",
-    "Trading",
+    "Transportation",
     "Manufacturing",
-    "E-commerce",
-    "Healthcare",
-    "Government",
+    "Finance",
+    "Agro Industry",
+    "Hotel",
   ];
   const [activeCategory, setActiveCategory] = useState("All");
 
@@ -104,7 +133,7 @@ const Clients = () => {
               onClick={() => setActiveCategory(category)}
               className={`px-6 py-3 rounded-full font-semibold transition-all duration-300 hover-lift ${
                 activeCategory === category
-                  ? "bg-gradient-to-r from-blue-600 to-purple-700 text-white shadow-lg"
+                  ? "bg-gradient-to-r from-[#006AAB] to-[#72BBDA] text-white shadow-lg"
                   : "bg-white text-gray-700 border border-gray-200"
               }`}
             >
@@ -113,27 +142,24 @@ const Clients = () => {
           ))}
         </div>
 
-        {/* Clients Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+        {/* Clients Logos Grid (logo-only tiles) */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
           {filteredClients.map((client, index) => (
             <div
               key={index}
-              className={`bg-white rounded-2xl p-6 flex flex-col items-center justify-center hover-lift transition-all duration-500 border border-gray-100 ${
+              className={`bg-white rounded-xl p-4 flex items-center justify-center hover-lift transition-all duration-500 border border-gray-100 ${
                 visibleItems.includes(index)
-                  ? "opacity-100 transform translate-y-0 scale-100"
-                  : "opacity-0 transform translate-y-10 scale-95"
+                  ? "opacity-100 translate-y-0 scale-100"
+                  : "opacity-0 translate-y-6 scale-95"
               }`}
-              style={{ transitionDelay: `${index * 100}ms` }}
+              style={{ transitionDelay: `${index * 80}ms` }}
             >
-              <div className="w-32 h-20 mb-4 flex items-center justify-center bg-gray-50 rounded-lg p-2">
-                <div className="text-center">
-                  <img
-                    src={client.logo}
-                    alt={client.name}
-                    className="max-h-20 object-contain mx-auto mb-2"
-                  />
-                </div>
-              </div>
+              <img
+                src={client.logo}
+                alt={client.name}
+                loading="lazy"
+                className="max-h-12 object-contain mx-auto"
+              />
             </div>
           ))}
         </div>

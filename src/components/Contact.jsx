@@ -38,7 +38,7 @@ const Contact = () => {
       icon: <Mail size={32} />,
       title: "Email",
       details: ["proaddismarketing@gmail.com", "contact@proaddismarketing.com"],
-      color: "from-purple-500 to-pink-500",
+      color: "from-[#72BBDA] to-pink-500",
       delay: "100",
     },
     {
@@ -115,13 +115,13 @@ const Contact = () => {
       <div className="container mx-auto px-6 relative z-10">
         <div className="text-center mb-16">
           <div className="inline-flex items-center gap-3 bg-white/80 backdrop-blur-sm rounded-full px-6 py-3 mb-6 animate-fade-in-up border border-blue-200 shadow-sm">
-            <MessageCircle className="text-blue-600" size={24} />
+            <MessageCircle className="text-[#006AAB]" size={24} />
             <span className="text-blue-700 font-semibold">Get In Touch</span>
           </div>
 
           <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4 animate-fade-in-up">
             Contact{" "}
-            <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-[#006AAB] to-[#72BBDA] bg-clip-text text-transparent">
               Us
             </span>
           </h2>
@@ -136,7 +136,7 @@ const Contact = () => {
           <div className="space-y-8">
             <div className="animate-fade-in-up">
               <h3 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3">
-                <Target className="text-blue-600" size={28} />
+                <Target className="text-[#006AAB]" size={28} />
                 Connect With Us
               </h3>
 
@@ -158,7 +158,7 @@ const Contact = () => {
                         {info.icon}
                       </div>
                       <div className="flex-1">
-                        <h4 className="text-lg font-bold text-gray-800 mb-2 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-purple-600 group-hover:bg-clip-text transition-all duration-300">
+                        <h4 className="text-lg font-bold text-gray-800 mb-2 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-[#006AAB] group-hover:to-purple-600 group-hover:bg-clip-text transition-all duration-300">
                           {info.title}
                         </h4>
                         <div className="space-y-1">
@@ -174,14 +174,14 @@ const Contact = () => {
                       </div>
                     </div>
 
-                    <div className="w-0 h-0.5 bg-gradient-to-r from-blue-500 to-purple-500 mt-3 group-hover:w-full transition-all duration-500"></div>
+                    <div className="w-0 h-0.5 bg-gradient-to-r from-blue-500 to-[#72BBDA] mt-3 group-hover:w-full transition-all duration-500"></div>
                   </div>
                 ))}
               </div>
             </div>
 
             {/* Additional Info Card */}
-            {/* <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-6 text-white shadow-2xl hover-lift transition-all duration-300 animate-fade-in-up">
+            {/* <div className="bg-gradient-to-r from-[#006AAB] to-[#72BBDA] rounded-2xl p-6 text-white shadow-2xl hover-lift transition-all duration-300 animate-fade-in-up">
               <div className="flex items-center gap-3 mb-4">
                 <Star className="text-yellow-300" size={24} />
                 <h4 className="text-xl font-bold">Why Choose Us?</h4>
@@ -211,7 +211,7 @@ const Contact = () => {
           <div className="animate-fade-in-up">
             <div className="bg-white rounded-2xl p-8 shadow-2xl hover-lift transition-all duration-300 border border-gray-100">
               <h3 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3">
-                <Send className="text-blue-600" size={28} />
+                <Send className="text-[#006AAB]" size={28} />
                 Send us a Message
               </h3>
 
@@ -220,7 +220,7 @@ const Contact = () => {
                   <div className="group">
                     <label
                       htmlFor="name"
-                      className="block text-gray-700 font-medium mb-2 group-hover:text-blue-600 transition-colors duration-300"
+                      className="block text-gray-700 font-medium mb-2 group-hover:text-[#006AAB] transition-colors duration-300"
                     >
                       Your Name *
                     </label>
@@ -230,7 +230,7 @@ const Contact = () => {
                       name="name"
                       value={formData.name}
                       onChange={handleChange}
-                      className="w-full px-4 py-3 rounded-2xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 bg-white group-hover:border-blue-300"
+                      className="w-full px-4 py-3 rounded-2xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#006AAB] focus:border-transparent transition-all duration-300 bg-white group-hover:border-[#006AAB]"
                       required
                       placeholder="Enter your full name"
                     />
@@ -239,7 +239,7 @@ const Contact = () => {
                   <div className="group">
                     <label
                       htmlFor="email"
-                      className="block text-gray-700 font-medium mb-2 group-hover:text-purple-600 transition-colors duration-300"
+                      className="block text-gray-700 font-medium mb-2 group-hover:text-[#72BBDA] transition-colors duration-300"
                     >
                       Your Email *
                     </label>
@@ -249,7 +249,7 @@ const Contact = () => {
                       name="email"
                       value={formData.email}
                       onChange={handleChange}
-                      className="w-full px-4 py-3 rounded-2xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 bg-white group-hover:border-purple-300"
+                      className="w-full px-4 py-3 rounded-2xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#72BBDA] focus:border-transparent transition-all duration-300 bg-white group-hover:border-cyan-300"
                       required
                       placeholder="Enter your email address"
                     />
@@ -281,7 +281,7 @@ const Contact = () => {
                   className={`w-full py-4 rounded-2xl font-semibold hover-lift transition-all duration-300 flex items-center justify-center gap-3 group relative overflow-hidden ${
                     isSubmitting
                       ? "bg-gray-400 cursor-not-allowed"
-                      : "bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-lg transform hover:scale-105"
+                      : "bg-gradient-to-r from-[#006AAB] to-[#72BBDA] hover:from-[#006AAB] hover:to-[#72BBDA] shadow-lg transform hover:scale-105"
                   }`}
                 >
                   <span className="relative z-10 text-white flex items-center gap-2">
@@ -302,7 +302,7 @@ const Contact = () => {
                   </span>
 
                   {!isSubmitting && (
-                    <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-blue-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"></div>
+                    <div className="absolute inset-0 bg-gradient-to-r from-[#006AAB] to-[#72BBDA] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"></div>
                   )}
                 </button>
 
@@ -318,7 +318,7 @@ const Contact = () => {
               {[
                 {
                   name: "Facebook",
-                  color: "bg-blue-500 hover:bg-blue-600",
+                  color: "bg-blue-500 hover:bg-[#006AAB]",
                   icon: <Facebook />,
                 },
                 {
@@ -358,7 +358,7 @@ const Contact = () => {
 
         {/* Interactive Map Section */}
         <div className="mt-16 animate-fade-in-up">
-          <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-8 text-center text-white shadow-2xl">
+          <div className="bg-gradient-to-r from-[#006AAB] to-[#72BBDA] rounded-2xl p-8 text-center text-white shadow-2xl">
             <div className="flex items-center justify-center gap-3 mb-6">
               <Navigation className="text-yellow-300" size={32} />
               <h3 className="text-2xl md:text-3xl font-bold">

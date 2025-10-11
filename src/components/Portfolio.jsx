@@ -115,7 +115,7 @@ const Portfolio = () => {
     <section
       id="portfolio"
       ref={sectionRef}
-      className="py-20 bg-gradient-to-br from-gray-900 to-blue-900 relative overflow-hidden"
+      className="py-20 bg-gradient-to-br from-[#001827] to-[#006AAB] relative overflow-hidden"
     >
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-5">
@@ -132,13 +132,13 @@ const Portfolio = () => {
         <div className="text-center mb-16">
           <div className="inline-flex items-center gap-3 bg-white/10 backdrop-blur-sm rounded-full px-6 py-3 mb-6 animate-fade-in-up border border-blue-500/30">
             <Filter className="text-blue-300" size={24} />
-            <span className="text-blue-200 font-semibold">Our Portfolio</span>
+            <span className="text-blue-200 font-semibold">Projects</span>
           </div>
 
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-4 animate-fade-in-up">
-            Featured{" "}
-            <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-              Projects
+            Our{" "}
+            <span className="bg-gradient-to-r from-[#006AAB] to-[#72BBDA] bg-clip-text text-transparent">
+              Portfolio
             </span>
           </h2>
           <p className="text-xl text-blue-100 max-w-2xl mx-auto animate-fade-in-up">
@@ -154,7 +154,7 @@ const Portfolio = () => {
               onClick={() => setActiveFilter(filter.key)}
               className={`group px-6 py-3 rounded-full font-semibold transition-all duration-300 hover-lift relative overflow-hidden ${
                 activeFilter === filter.key
-                  ? "bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg transform scale-105"
+                  ? "bg-gradient-to-r from-[#006AAB] to-[#72BBDA] text-white shadow-lg transform scale-105"
                   : "bg-white/10 backdrop-blur-sm text-blue-100 border border-blue-500/30 hover:border-blue-400"
               } animate-fade-in-up`}
               style={{ animationDelay: `${index * 100}ms` }}
@@ -164,7 +164,7 @@ const Portfolio = () => {
                 {filter.label}
               </span>
               {activeFilter === filter.key && (
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-[#006AAB] to-[#72BBDA] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
               )}
             </button>
           ))}
@@ -205,7 +205,7 @@ const Portfolio = () => {
 
                 {/* Category Badge */}
                 <div className="absolute top-4 left-4">
-                  <span className="px-3 py-1 bg-gradient-to-r from-blue-500 to-purple-600 text-white text-xs font-semibold rounded-full shadow-lg">
+                  <span className="px-3 py-1 bg-gradient-to-r from-[#006AAB] to-[#72BBDA] text-white text-xs font-semibold rounded-full shadow-lg">
                     {project.category}
                   </span>
                 </div>
@@ -234,7 +234,7 @@ const Portfolio = () => {
         </div>
 
         {/* Portfolio CTA */}
-        <div className="text-center mt-16 animate-fade-in-up">
+        {/* <div className="text-center mt-16 animate-fade-in-up">
           <div className="bg-gradient-to-r from-blue-600/30 to-purple-600/30 backdrop-blur-lg rounded-2xl p-8 border border-blue-500/30 max-w-4xl mx-auto hover-lift transition-all duration-300">
             <h3 className="text-2xl md:text-3xl font-bold text-white mb-4">
               Ready to Start Your Project?
@@ -248,7 +248,7 @@ const Portfolio = () => {
               Start Your Project
             </button>
           </div>
-        </div>
+        </div> */}
       </div>
     </section>
   );

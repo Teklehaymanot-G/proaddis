@@ -1,18 +1,16 @@
 // src/components/Services.jsx
-import { useState, useRef, useEffect } from "react";
 import {
-  Target,
-  TrendingUp,
-  Users,
-  Package,
-  Radio,
-  Tv,
-  Newspaper,
-  Megaphone,
   Camera,
   Code,
   HeartHandshake,
+  Megaphone,
+  Package,
+  Target,
+  TrendingUp,
+  Tv,
+  Users,
 } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 
 const Services = () => {
   const [visibleItems, setVisibleItems] = useState([]);
@@ -24,62 +22,62 @@ const Services = () => {
       title: "Product Strategy",
       description:
         "Product positioning, branding, and lifecycle management analysis",
-      color: "from-blue-500 to-cyan-500",
+      color: "from-[#006AAB] to-[#72BBDA]",
     },
     {
       icon: <TrendingUp size={48} />,
       title: "Price Strategy",
       description: "Data-driven pricing strategies for maximum profitability",
-      color: "from-blue-600 to-purple-600",
+      color: "from-[#005F94] to-[#6EC0E8]",
     },
     {
       icon: <Package size={48} />,
       title: "Distribution Strategy",
       description: "Traditional and digital channel optimization",
-      color: "from-purple-500 to-pink-500",
+      color: "from-[#8B5CF6] to-[#EC4899]",
     },
     {
       icon: <Megaphone size={48} />,
       title: "Promotion Strategy",
       description: "Data-based promotion strategies for brand visibility",
-      color: "from-cyan-500 to-blue-500",
+      color: "from-[#72BBDA] to-[#006AAB]",
     },
     {
       icon: <Tv size={48} />,
       title: "Traditional Advertising",
       description: "TV, Radio, Print, Billboards, Signage, and Packaging",
-      color: "from-indigo-500 to-purple-500",
+      color: "from-[#3B82F6] to-[#7C3AED]",
     },
     {
       icon: <Users size={48} />,
       title: "Digital Advertising",
       description: "Search Engine, Social Media, and Display Advertising",
-      color: "from-blue-500 to-indigo-500",
+      color: "from-[#006AAB] to-[#4F46E5]",
     },
     {
       icon: <HeartHandshake size={48} />,
       title: "Public Relations",
       description:
         "Media relations, corporate events, and reputation management",
-      color: "from-purple-500 to-blue-500",
+      color: "from-[#7C3AED] to-[#72BBDA]",
     },
     {
       icon: <Target size={48} />,
       title: "Branding Services",
       description: "Brand strategy, visual identity, and positioning",
-      color: "from-cyan-500 to-purple-500",
+      color: "from-[#006AAB] to-[#8B5CF6]",
     },
     {
       icon: <Camera size={48} />,
       title: "Photography & Videography",
       description: "Commercial, corporate, event, and social media content",
-      color: "from-blue-500 to-pink-500",
+      color: "from-[#006AAB] to-[#EC4899]",
     },
     {
       icon: <Code size={48} />,
       title: "Web Development",
       description: "ERP solutions, SEO, mobile apps, and e-commerce",
-      color: "from-purple-600 to-blue-600",
+      color: "from-[#8B5CF6] to-[#006AAB]",
     },
   ];
 
@@ -115,12 +113,14 @@ const Services = () => {
       <div className="container mx-auto px-6">
         <div className="text-center mb-16">
           <div className="inline-flex items-center gap-3 bg-white/80 backdrop-blur-sm rounded-full px-6 py-3 mb-6 animate-fade-in-up border border-blue-200">
-            <Target className="text-blue-600" size={24} />
-            <span className="text-blue-700 font-semibold">Our Services</span>
+            <Target className="text-[#006AAB]" size={24} />
+            <span className="text-[#005F94] font-semibold">
+              Marketing Solutions{" "}
+            </span>
           </div>
 
           <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4 animate-fade-in-up">
-            Innovative Marketing Solutions
+            Our Services
           </h2>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto animate-fade-in-up">
             Powered by Data and Creative Excellence
