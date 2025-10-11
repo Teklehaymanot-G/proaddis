@@ -1,74 +1,92 @@
 // src/components/Portfolio.jsx
 import { useState, useRef, useEffect } from "react";
-import { ExternalLink, Github, Target, Filter } from "lucide-react";
+import {
+  ExternalLink,
+  Github,
+  Target,
+  Filter,
+  ChevronDown,
+} from "lucide-react";
 
 const Portfolio = () => {
   const [activeFilter, setActiveFilter] = useState("all");
   const [visibleItems, setVisibleItems] = useState([]);
+  const [showAll, setShowAll] = useState(false);
   const sectionRef = useRef(null);
 
   const projects = [
     {
       id: 1,
-      title: "E-Commerce Platform",
-      category: "web",
+      title: "Abay Paints Social Media Campaign",
+      category: "social media",
       image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=500",
-      description: "Full-stack e-commerce solution with React and Node.js",
-      technologies: ["React", "Node.js", "MongoDB"],
+      description: "Social media marketing campaign for Abay Paints",
+      technologies: ["FaceBook", "TikTok", "Instagram", "Telegram"],
       liveUrl: "#",
       githubUrl: "#",
     },
     {
       id: 2,
-      title: "Mobile Banking App",
-      category: "mobile",
+      title: "Warka Academy Social Media Campaign",
+      category: "social media",
       image: "https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=500",
-      description: "Secure mobile banking application for iOS and Android",
-      technologies: ["React Native", "Firebase", "Redux"],
+      description: "Social media marketing campaign for Warka Academy",
+      technologies: ["FaceBook", "TikTok", "Instagram", "Telegram"],
       liveUrl: "#",
       githubUrl: "#",
     },
     {
       id: 3,
-      title: "Brand Identity",
-      category: "design",
+      title: "Valtra Logistics",
+      category: "website",
       image:
         "https://images.unsplash.com/photo-1565688534245-05d6b5be184a?w=500",
-      description: "Complete brand identity and visual design system",
-      technologies: ["Figma", "Adobe Creative Suite"],
+      description: "Website development for valtra logistics",
+      technologies: ["WordPress"],
       liveUrl: "#",
       githubUrl: "#",
     },
     {
       id: 4,
-      title: "Social Media Dashboard",
+      title: "Valtra Logistics Logo Design",
       category: "web",
       image:
         "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=500",
-      description: "Analytics dashboard for social media management",
-      technologies: ["Vue.js", "D3.js", "Express"],
+      description: "Logo design for Valtra Logistics",
+      technologies: ["Logo", "Brand Color", "Letterhead Design"],
       liveUrl: "#",
       githubUrl: "#",
     },
     {
       id: 5,
-      title: "Fitness Tracking App",
+      title: "Sika Chemical Engineering Sinage",
       category: "mobile",
       image:
         "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=500",
-      description: "Health and fitness tracking mobile application",
-      technologies: ["Flutter", "Firebase", "HealthKit"],
+      description: "Signage design for Sika Chemical Engineering",
+      technologies: ["Signage", "Lightbox"],
       liveUrl: "#",
       githubUrl: "#",
     },
     {
       id: 6,
-      title: "Marketing Campaign",
+      title: "Tap & Go Campaign",
       category: "marketing",
       image:
         "https://images.unsplash.com/photo-1432888622747-4eb9a8efeb07?w=500",
-      description: "Digital marketing campaign with 300% ROI increase",
-      technologies: ["Google Ads", "Facebook Ads", "Analytics"],
+      description: "Tap & Go Campaign for Little, Visa & Bank of Abyssinia",
+      technologies: ["Outdoor Screen", "QR Code Scanner", "Analytics"],
+      liveUrl: "#",
+      githubUrl: "#",
+    },
+    {
+      id: 7,
+      title: "Tap & Go Campaign",
+      category: "marketing",
+      image:
+        "https://images.unsplash.com/photo-1432888622747-4eb9a8efeb07?w=500",
+      description: "Tap & Go Campaign for Little, Visa & Bank of Abyssinia",
+      technologies: ["Outdoor Screen", "QR Code Scanner", "Analytics"],
       liveUrl: "#",
       githubUrl: "#",
     },
@@ -86,6 +104,11 @@ const Portfolio = () => {
     activeFilter === "all"
       ? projects
       : projects.filter((project) => project.category === activeFilter);
+
+  // Show only 3 projects initially, then all when "View More" is clicked
+  const displayedProjects = showAll
+    ? filteredProjects
+    : filteredProjects.slice(0, 3);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -110,6 +133,28 @@ const Portfolio = () => {
 
     return () => observer.disconnect();
   }, [activeFilter]);
+
+  const handleViewMore = () => {
+    setShowAll(true);
+    // Scroll to the portfolio section when showing more
+    setTimeout(() => {
+      document.getElementById("portfolio").scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }, 100);
+  };
+
+  const handleViewLess = () => {
+    setShowAll(false);
+    // Scroll to the portfolio section when showing less
+    setTimeout(() => {
+      document.getElementById("portfolio").scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }, 100);
+  };
 
   return (
     <section
@@ -151,7 +196,10 @@ const Portfolio = () => {
           {filters.map((filter, index) => (
             <button
               key={filter.key}
-              onClick={() => setActiveFilter(filter.key)}
+              onClick={() => {
+                setActiveFilter(filter.key);
+                setShowAll(false);
+              }}
               className={`group px-6 py-3 rounded-full font-semibold transition-all duration-300 hover-lift relative overflow-hidden ${
                 activeFilter === filter.key
                   ? "bg-gradient-to-r from-[#006AAB] to-[#72BBDA] text-white shadow-lg transform scale-105"
@@ -170,9 +218,20 @@ const Portfolio = () => {
           ))}
         </div>
 
+        {/* Projects Counter */}
+        <div className="text-center mb-8">
+          <p className="text-blue-200">
+            Showing {displayedProjects.length} of {filteredProjects.length}{" "}
+            projects
+            {filteredProjects.length > 3 &&
+              !showAll &&
+              " (3 featured projects)"}
+          </p>
+        </div>
+
         {/* Projects Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredProjects.map((project, index) => (
+          {displayedProjects.map((project, index) => (
             <div
               key={project.id}
               className={`group bg-white/5 backdrop-blur-lg rounded-2xl overflow-hidden border border-white/10 hover:border-blue-400/50 transition-all duration-500 hover-lift ${
@@ -232,6 +291,38 @@ const Portfolio = () => {
             </div>
           ))}
         </div>
+
+        {/* View More / View Less Button */}
+        {filteredProjects.length > 3 && (
+          <div className="text-center mt-12">
+            {!showAll ? (
+              <button
+                onClick={handleViewMore}
+                className="group bg-gradient-to-r from-[#006AAB] to-[#72BBDA] text-white px-8 py-4 rounded-2xl font-semibold hover-lift transform hover:scale-105 transition-all duration-300 shadow-2xl flex items-center gap-3 mx-auto animate-fade-in-up"
+              >
+                <span>View All Projects</span>
+                <ChevronDown
+                  size={20}
+                  className="group-hover:translate-y-1 transition-transform duration-300"
+                />
+                <span className="text-blue-200 text-sm ml-2">
+                  ({filteredProjects.length - 3} more)
+                </span>
+              </button>
+            ) : (
+              <button
+                onClick={handleViewLess}
+                className="group bg-gradient-to-r from-[#006AAB] to-[#72BBDA] text-white px-8 py-4 rounded-2xl font-semibold hover-lift transform hover:scale-105 transition-all duration-300 shadow-2xl flex items-center gap-3 mx-auto animate-fade-in-up"
+              >
+                <span>Show Featured Only</span>
+                <ChevronDown
+                  size={20}
+                  className="group-hover:-translate-y-1 transition-transform duration-300 rotate-180"
+                />
+              </button>
+            )}
+          </div>
+        )}
 
         {/* Portfolio CTA */}
         {/* <div className="text-center mt-16 animate-fade-in-up">

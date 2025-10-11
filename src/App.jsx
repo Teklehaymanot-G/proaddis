@@ -25,7 +25,7 @@ function App() {
       <Portfolio />
       <CaseStudies /> {/* Add Case Studies */}
       <Testimonials /> {/* Add Testimonials */}
-      <Team /> {/* Add Team section */}
+      {/* <Team />  */}
       <Contact />
       <Footer />
     </div>

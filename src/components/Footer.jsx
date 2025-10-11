@@ -34,8 +34,9 @@ const Footer = () => {
           <div className="md:col-span-4">
             <h3 className="text-2xl font-bold mb-3">ProAddis Marketing</h3>
             <p className="text-blue-100 mb-6 max-w-md">
-              We help Ethiopian businesses grow with tailored marketing, digital
-              products, and creative strategy.
+              Provides strategic marketing solutions through creative,
+              innovative and data-driven insights to help organizations achieve
+              their goals and succeed in Ethiopia's volatile business landscape.
             </p>
           </div>
 

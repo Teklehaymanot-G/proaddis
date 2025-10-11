@@ -161,10 +161,11 @@ const Hero = () => {
               Addis
             </h1>
             <div
-              className="text-4xl md:text-6xl font-light animate-slide-in-from-bottom tracking-widest"
+              className="text-[10px] md:text-6xl font-light animate-slide-in-from-bottom tracking-widest"
               style={{
                 color: "#FFF",
                 fontFamily: "Poppins, sans-serif",
+                fontSize: "45px",
               }}
             >
               MARKETING
