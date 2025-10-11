@@ -1,14 +1,13 @@
 // src/components/WhyUs.jsx
 import {
+  Award,
   Brain,
   Database,
-  Users,
-  Award,
-  Shield,
-  TrendingUp,
-  Target,
   Heart,
+  Shield,
   Sparkles,
+  TrendingUp,
+  Users,
 } from "lucide-react";
 
 const WhyUs = () => {
@@ -112,25 +111,22 @@ const WhyUs = () => {
 
           <h2 className="text-5xl md:text-7xl font-black text-white mb-6 animate-fade-in-up">
             Why Choose{" "}
-            <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">
-              ProAddis
+            <span className="text-white text-transparent">
+              Pr
+              <img
+                src="mark.png"
+                alt="ProAddis Logo"
+                style={{ width: "auto", height: "50px", display: "inline" }}
+              />
+              Addis
             </span>
             ?
           </h2>
           <p className="text-xl text-gray-300 max-w-3xl mx-auto animate-fade-in-up leading-relaxed">
-            We don't just create campaigns—we build{" "}
-            <span className="text-blue-300 font-semibold">
-              lasting partnerships
-            </span>{" "}
-            that drive{" "}
-            <span className="text-purple-300 font-semibold">
-              measurable growth
-            </span>{" "}
-            and{" "}
-            <span className="text-cyan-300 font-semibold">
-              sustainable success
-            </span>
-            .
+            We don't just create campaigns; we build{" "}
+            <span className="font-semibold">lasting partnerships</span> that
+            drive <span className="font-semibold">measurable growth</span> and{" "}
+            <span className=" font-semibold">sustainable success</span>.
           </p>
         </div>
 
@@ -177,7 +173,7 @@ const WhyUs = () => {
         </div>
 
         {/* Enhanced Bottom CTA */}
-        <div className="text-center mt-16 animate-fade-in-up delay-700">
+        {/* <div className="text-center mt-16 animate-fade-in-up delay-700">
           <div className="bg-gradient-to-r from-blue-600/30 via-purple-600/30 to-cyan-600/30 backdrop-blur-xl rounded-3xl p-12 max-w-6xl mx-auto border border-white/20 hover-lift transition-all duration-500 group">
             <div className="flex items-center justify-center gap-6 mb-6">
               <Heart
@@ -185,7 +181,7 @@ const WhyUs = () => {
                 size={40}
               />
               <span className="text-3xl text-white font-light italic bg-gradient-to-r from-white to-blue-100 bg-clip-text text-transparent">
-                "Walking your path to success"
+                "Strategic Marketing Solutions"
               </span>
               <Heart
                 className="text-pink-400 group-hover:scale-110 transition-transform duration-300"
@@ -198,7 +194,6 @@ const WhyUs = () => {
               challenges into opportunities and goals into achievements.
             </p>
 
-            {/* Stats Row */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-8">
               {[
                 { number: "50+", label: "Successful Projects" },
@@ -218,7 +213,7 @@ const WhyUs = () => {
               ))}
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </section>
   );

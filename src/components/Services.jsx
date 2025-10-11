@@ -137,7 +137,7 @@ const Services = () => {
             ].map((tag, index) => (
               <span
                 key={tag}
-                className="px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-full text-sm font-medium shadow-lg hover-lift transform transition-all duration-300 hover:scale-105 animate-fade-in-up"
+                className="px-4 py-2 bg-gradient-to-r from-[#006AAB] to-[#72BBDA] text-white rounded-full text-sm font-medium shadow-lg hover-lift transform transition-all duration-300 hover:scale-105 animate-fade-in-up"
                 style={{ animationDelay: `${index * 100 + 500}ms` }}
               >
                 {tag}
@@ -162,7 +162,7 @@ const Services = () => {
               >
                 {service.icon}
               </div>
-              <h3 className="text-xl font-bold text-gray-800 mb-3 text-center group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-purple-600 group-hover:bg-clip-text transition-all duration-300">
+              <h3 className="text-xl font-bold text-gray-800 mb-3 text-center group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-[#006AAB] group-hover:to-[#72BBDA] group-hover:bg-clip-text transition-all duration-300">
                 {service.title}
               </h3>
               <p className="text-gray-600 text-center text-sm leading-relaxed group-hover:text-gray-700 transition-colors duration-300">
@@ -170,13 +170,13 @@ const Services = () => {
               </p>
 
               {/* Hover effect line */}
-              <div className="w-0 h-0.5 bg-gradient-to-r from-blue-500 to-purple-500 mx-auto mt-4 group-hover:w-12 transition-all duration-300"></div>
+              <div className="w-0 h-0.5 bg-gradient-to-r from-[#006AAB] to-[#72BBDA] mx-auto mt-4 group-hover:w-12 transition-all duration-300"></div>
             </div>
           ))}
         </div>
 
         {/* CTA Section */}
-        <div className="text-center mt-16 animate-fade-in-up">
+        {/* <div className="text-center mt-16 animate-fade-in-up">
           <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-8 text-white max-w-4xl mx-auto shadow-2xl hover-lift transition-all duration-300">
             <h3 className="text-2xl md:text-3xl font-bold mb-4">
               Ready to Transform Your Business?
@@ -189,7 +189,7 @@ const Services = () => {
               Start Your Project
             </button>
           </div>
-        </div>
+        </div> */}
       </div>
     </section>
   );

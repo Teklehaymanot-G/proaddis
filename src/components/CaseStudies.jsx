@@ -4,11 +4,11 @@ import { ExternalLink, Eye, BarChart3, Users } from "lucide-react";
 const CaseStudies = () => {
   const caseStudies = [
     {
-      client: "War Academy Strength Co. Ltd",
+      client: "Warka Academy Strength Co. Ltd",
       challenge: "Low brand recognition in competitive education market",
       solution: "Comprehensive branding strategy with digital marketing",
       results: "300% increase in enrollment, 150% brand awareness growth",
-      image: "/images/case-studies/war-academy.jpg",
+      image: "warkka.png",
       services: ["Brand Strategy", "Digital Advertising", "PR Campaign"],
     },
     {

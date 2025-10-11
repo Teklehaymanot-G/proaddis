@@ -8,8 +8,8 @@ const Clients = () => {
   // Sample client logos - replace with actual client logos from your PDF
   const clients = [
     {
-      name: "War Academy Strength Co. Ltd",
-      logo: "/images/clients/war-academy-logo.png", // Add actual logo
+      name: "Warka Academy Strength Co. Ltd",
+      logo: "warka.png", // Add actual logo
       category: "Education",
       project: "Complete Branding & Marketing Strategy",
     },
@@ -91,9 +91,9 @@ const Clients = () => {
           <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4 animate-fade-in-up">
             Our Valued Clients
           </h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto animate-fade-in-up">
+          {/* <p className="text-xl text-gray-600 max-w-2xl mx-auto animate-fade-in-up">
             Trusted by leading businesses and organizations across Ethiopia
-          </p>
+          </p> */}
         </div>
 
         {/* Category Filter */}
@@ -127,23 +127,19 @@ const Clients = () => {
             >
               <div className="w-32 h-20 mb-4 flex items-center justify-center bg-gray-50 rounded-lg p-2">
                 <div className="text-center">
-                  <div className="text-xs text-gray-500 mb-1">
-                    {client.category}
-                  </div>
-                  <div className="font-semibold text-gray-800 text-sm leading-tight">
-                    {client.name.split(" ").slice(0, 2).join(" ")}
-                  </div>
+                  <img
+                    src={client.logo}
+                    alt={client.name}
+                    className="max-h-20 object-contain mx-auto mb-2"
+                  />
                 </div>
               </div>
-              <span className="text-xs text-gray-500 text-center">
-                {client.category}
-              </span>
             </div>
           ))}
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-16">
+        {/* <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-16">
           {[
             { number: "50+", label: "Projects Completed" },
             { number: "30+", label: "Happy Clients" },
@@ -161,7 +157,7 @@ const Clients = () => {
               <div className="text-gray-600 mt-2">{stat.label}</div>
             </div>
           ))}
-        </div>
+        </div> */}
       </div>
     </section>
   );

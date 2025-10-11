@@ -1,6 +1,5 @@
 /* src/index.css */
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
-
+@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -12,7 +11,7 @@
 }
 
 body {
-  font-family: "Inter", sans-serif;
+  font-family: "Lato", sans-serif;
   overflow-x: hidden;
   scroll-behavior: smooth;
 }
@@ -27,10 +26,10 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #006aab 0%, #004a7c 100%);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+  background: linear-gradient(135deg, #004a7c 0%, #006aab 100%);
 }

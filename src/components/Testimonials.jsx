@@ -6,7 +6,7 @@ const Testimonials = () => {
     {
       quote:
         "ProAddis transformed our brand presence in Ethiopia. Their data-driven approach delivered exceptional results.",
-      author: "War Academy Strength Co. Ltd",
+      author: "Warka Academy Strength Co. Ltd",
       position: "CEO",
     },
     {

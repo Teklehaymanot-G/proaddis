@@ -19,8 +19,8 @@ function App() {
       <Header />
       <Hero />
       <WhyUs />
-      <Process /> {/* Add Process section */}
       <Services />
+      <Process /> {/* Add Process section */}
       <Clients />
       <Portfolio />
       <CaseStudies /> {/* Add Case Studies */}

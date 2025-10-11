@@ -9,6 +9,11 @@ import {
   Target,
   Star,
   Navigation,
+  Facebook,
+  Twitter,
+  Instagram,
+  Linkedin,
+  Youtube,
 } from "lucide-react";
 
 const Contact = () => {
@@ -32,7 +37,7 @@ const Contact = () => {
     {
       icon: <Mail size={32} />,
       title: "Email",
-      details: ["contact@proaddismarketing.com"],
+      details: ["proaddismarketing@gmail.com", "contact@proaddismarketing.com"],
       color: "from-purple-500 to-pink-500",
       delay: "100",
     },
@@ -176,7 +181,7 @@ const Contact = () => {
             </div>
 
             {/* Additional Info Card */}
-            <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-6 text-white shadow-2xl hover-lift transition-all duration-300 animate-fade-in-up">
+            {/* <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-6 text-white shadow-2xl hover-lift transition-all duration-300 animate-fade-in-up">
               <div className="flex items-center gap-3 mb-4">
                 <Star className="text-yellow-300" size={24} />
                 <h4 className="text-xl font-bold">Why Choose Us?</h4>
@@ -199,7 +204,7 @@ const Contact = () => {
                   Ongoing support and maintenance
                 </li>
               </ul>
-            </div>
+            </div> */}
           </div>
 
           {/* Contact Form */}
@@ -311,11 +316,31 @@ const Contact = () => {
             {/* Social Media Links */}
             <div className="flex justify-center gap-4 mt-8">
               {[
-                { name: "Facebook", color: "bg-blue-500 hover:bg-blue-600" },
-                { name: "Twitter", color: "bg-cyan-500 hover:bg-cyan-600" },
-                { name: "Instagram", color: "bg-pink-500 hover:bg-pink-600" },
-                { name: "LinkedIn", color: "bg-blue-700 hover:bg-blue-800" },
-                { name: "YouTube", color: "bg-red-500 hover:bg-red-600" },
+                {
+                  name: "Facebook",
+                  color: "bg-blue-500 hover:bg-blue-600",
+                  icon: <Facebook />,
+                },
+                {
+                  name: "Twitter",
+                  color: "bg-cyan-500 hover:bg-cyan-600",
+                  icon: <Twitter />,
+                },
+                {
+                  name: "Instagram",
+                  color: "bg-pink-500 hover:bg-pink-600",
+                  icon: <Instagram />,
+                },
+                {
+                  name: "LinkedIn",
+                  color: "bg-blue-700 hover:bg-blue-800",
+                  icon: <Linkedin />,
+                },
+                {
+                  name: "YouTube",
+                  color: "bg-red-500 hover:bg-red-600",
+                  icon: <Youtube />,
+                },
               ].map((social, index) => (
                 <a
                   key={social.name}
@@ -324,9 +349,7 @@ const Contact = () => {
                   style={{ animationDelay: `${index * 100 + 500}ms` }}
                   title={social.name}
                 >
-                  <span className="font-semibold text-xs">
-                    {social.name[0]}
-                  </span>
+                  <span className="font-semibold text-xs">{social.icon}</span>
                 </a>
               ))}
             </div>
