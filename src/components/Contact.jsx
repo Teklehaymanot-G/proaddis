@@ -99,7 +99,7 @@ const Contact = () => {
 
   // Google Maps embed URL for the location
   const mapUrl =
-    "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3940.218258178909!2d38.76345157569646!3d9.022537089410693!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x164b85e8e0cfe50d%3A0x9b2695be43d2c2a3!2sMexico%20Square%2C%20Addis%20Ababa!5e0!3m2!1sen!2set!4v1698765432107!5m2!1sen!2set";
+    "https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d4686.315735894789!2d38.74791207639912!3d8.999167625171903!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2set!4v1760343776295!5m2!1sen!2set";
 
   return (
     <section
@@ -116,7 +116,7 @@ const Contact = () => {
         <div className="text-center mb-16">
           <div className="inline-flex items-center gap-3 bg-white/80 backdrop-blur-sm rounded-full px-6 py-3 mb-6 animate-fade-in-up border border-blue-200 shadow-sm">
             <MessageCircle className="text-[#006AAB]" size={24} />
-            <span className="text-blue-700 font-semibold">Get In Touch</span>
+            <span className="text-[#006AAB] font-semibold">Get In Touch</span>
           </div>
 
           <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4 animate-fade-in-up">
