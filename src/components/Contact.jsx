@@ -24,6 +24,7 @@ const Contact = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [visibleItems, setVisibleItems] = useState([]);
+  const [submitStatus, setSubmitStatus] = useState("");
   const sectionRef = useRef(null);
 
   const contactInfo = [
@@ -81,13 +82,50 @@ const Contact = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setSubmitStatus("");
 
-    setTimeout(() => {
-      console.log("Form submitted:", formData);
+    try {
+      const response = await fetch(
+        "https://contact-api.proaddismarketing.com/api/contact",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+
+      const result = await response.json();
+
+      if (result.success) {
+        setSubmitStatus("success");
+        setFormData({ name: "", email: "", message: "" });
+
+        // Reset status after 5 seconds
+        setTimeout(() => {
+          setSubmitStatus("");
+        }, 5000);
+      } else {
+        setSubmitStatus("error");
+        console.error("Submission error:", result.error);
+
+        // Reset status after 5 seconds
+        setTimeout(() => {
+          setSubmitStatus("");
+        }, 5000);
+      }
+    } catch (error) {
+      console.error("Network error:", error);
+      setSubmitStatus("error");
+
+      // Reset status after 5 seconds
+      setTimeout(() => {
+        setSubmitStatus("");
+      }, 5000);
+    } finally {
       setIsSubmitting(false);
-      setFormData({ name: "", email: "", message: "" });
-      alert("Thank you for your message! We will get back to you soon.");
-    }, 2000);
+    }
   };
 
   const handleChange = (e) => {
@@ -126,8 +164,7 @@ const Contact = () => {
             </span>
           </h2>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto animate-fade-in-up">
-            Let's map your journey to success together. We're here to help you
-            grow.
+            Let's map your journey to success together.
           </p>
         </div>
 
@@ -214,6 +251,21 @@ const Contact = () => {
                 <Send className="text-[#006AAB]" size={28} />
                 Send us a Message
               </h3>
+
+              {/* Status Messages */}
+              {submitStatus === "success" && (
+                <div className="mb-6 p-4 bg-green-100 border border-green-400 text-green-700 rounded-2xl animate-fade-in-up">
+                  ✅ Thank you! Your message has been sent successfully. We'll
+                  get back to you soon.
+                </div>
+              )}
+
+              {submitStatus === "error" && (
+                <div className="mb-6 p-4 bg-red-100 border border-red-400 text-red-700 rounded-2xl animate-fade-in-up">
+                  ❌ Sorry, there was an error sending your message. Please try
+                  again or contact us directly.
+                </div>
+              )}
 
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

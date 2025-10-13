@@ -26,14 +26,14 @@ const Header = () => {
           {scrolled ? (
             // Blue logo for scrolled state (white background)
             <img
-              src="/logo2.png"
+              src="logos/logo2.png"
               alt="ProAddis Logo"
               className="w-auto h-[45px]"
             />
           ) : (
             // White logo for normal state (transparent background)
             <img
-              src="/logo.png"
+              src="logos/logo.png"
               alt="ProAddis Logo"
               className="w-auto h-[45px]"
             />

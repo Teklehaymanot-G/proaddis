@@ -22,18 +22,16 @@ const Portfolio = () => {
       image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=500",
       description: "Social media marketing campaign for Abay Paints",
       technologies: ["FaceBook", "TikTok", "Instagram", "Telegram"],
-      liveUrl: "#",
-      githubUrl: "#",
+      liveUrl: "https://www.tiktok.com/@abayesdeepaints",
     },
     {
       id: 2,
       title: "Warka Academy Social Media Campaign",
       category: "social media",
-      image: "https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=500",
+      image: "projects/warka.png",
       description: "Social media marketing campaign for Warka Academy",
       technologies: ["FaceBook", "TikTok", "Instagram", "Telegram"],
-      liveUrl: "#",
-      githubUrl: "#",
+      liveUrl: "https://www.tiktok.com/@warkaacademy",
     },
     {
       id: 3,
@@ -43,8 +41,7 @@ const Portfolio = () => {
         "https://images.unsplash.com/photo-1565688534245-05d6b5be184a?w=500",
       description: "Website development for valtra logistics",
       technologies: ["WordPress"],
-      liveUrl: "#",
-      githubUrl: "#",
+      liveUrl: "https://www.valtralogistics.com",
     },
     {
       id: 4,
@@ -54,41 +51,30 @@ const Portfolio = () => {
         "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=500",
       description: "Logo design for Valtra Logistics",
       technologies: ["Logo", "Brand Color", "Letterhead Design"],
-      liveUrl: "#",
-      githubUrl: "#",
     },
     {
       id: 5,
       title: "Sika Chemical Engineering Sinage",
       category: "mobile",
-      image:
-        "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=500",
+      image: "projects/sika sinage.jpg",
       description: "Signage design for Sika Chemical Engineering",
       technologies: ["Signage", "Lightbox"],
-      liveUrl: "#",
-      githubUrl: "#",
     },
     {
       id: 6,
-      title: "Tap & Go Campaign",
-      category: "marketing",
-      image:
-        "https://images.unsplash.com/photo-1432888622747-4eb9a8efeb07?w=500",
-      description: "Tap & Go Campaign for Little, Visa & Bank of Abyssinia",
-      technologies: ["Outdoor Screen", "QR Code Scanner", "Analytics"],
-      liveUrl: "#",
-      githubUrl: "#",
+      title: "Sika Chemical Engineering Production",
+      category: "mobile",
+      image: "projects/sika production.jpg",
+      description: "Production design for Sika Chemical Engineering",
+      technologies: ["Production"],
     },
     {
-      id: 7,
+      id: 8,
       title: "Tap & Go Campaign",
       category: "marketing",
-      image:
-        "https://images.unsplash.com/photo-1432888622747-4eb9a8efeb07?w=500",
+      image: "projects/tap & go.jpg",
       description: "Tap & Go Campaign for Little, Visa & Bank of Abyssinia",
       technologies: ["Outdoor Screen", "QR Code Scanner", "Analytics"],
-      liveUrl: "#",
-      githubUrl: "#",
     },
   ];
 
@@ -186,9 +172,6 @@ const Portfolio = () => {
               Portfolio
             </span>
           </h2>
-          <p className="text-xl text-blue-100 max-w-2xl mx-auto animate-fade-in-up">
-            Discover how we've helped businesses achieve their digital goals
-          </p>
         </div>
 
         {/* Updated Filter Buttons with Brand Colors */}
@@ -247,20 +230,17 @@ const Portfolio = () => {
                   alt={project.title}
                   className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-blue-900/80 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-end justify-center gap-4 p-6">
-                  <a
-                    href={project.liveUrl}
-                    className="bg-white text-blue-600 p-3 rounded-full hover-lift transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 delay-100 hover:scale-110"
-                  >
-                    <ExternalLink size={20} />
-                  </a>
-                  <a
-                    href={project.githubUrl}
-                    className="bg-white text-blue-600 p-3 rounded-full hover-lift transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 delay-200 hover:scale-110"
-                  >
-                    <Github size={20} />
-                  </a>
-                </div>
+                {project.liveUrl && (
+                  <div className="absolute inset-0 bg-gradient-to-t from-blue-900/80 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-end justify-center gap-4 p-6">
+                    <a
+                      href={project.liveUrl}
+                      target="_blank"
+                      className="bg-white text-blue-600 p-3 rounded-full hover-lift transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 delay-100 hover:scale-110"
+                    >
+                      <ExternalLink size={20} />
+                    </a>
+                  </div>
+                )}
 
                 {/* Category Badge */}
                 <div className="absolute top-4 left-4">
