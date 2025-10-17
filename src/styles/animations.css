@@ -336,3 +336,23 @@
 .animate-scroll-right:hover {
   animation-play-state: paused;
 }
+/* Counter animation support */
+@keyframes float-slow {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.animate-float-slow {
+  animation: float-slow 6s ease-in-out infinite;
+}
+
+/* Ensure smooth counting animation */
+.counter-container {
+  display: inline-block;
+  min-width: 60px;
+}

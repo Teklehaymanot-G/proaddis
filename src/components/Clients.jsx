@@ -80,7 +80,7 @@ const Clients = () => {
     },
     {
       name: "Fresco Juice",
-      logo: "logos/fresco.webp",
+      logo: "logos/fresco.jpg",
       category: "Logo Design",
       project: "Logo Design",
     },

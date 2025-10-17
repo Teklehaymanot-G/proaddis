@@ -3,12 +3,71 @@ import {
   Award,
   Brain,
   Database,
-  Heart,
   Shield,
   Sparkles,
   TrendingUp,
   Users,
 } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
+
+const Counter = ({ end, duration = 2000, suffix = "" }) => {
+  const [count, setCount] = useState(0);
+  const countRef = useRef(null);
+  const observerRef = useRef(null);
+
+  useEffect(() => {
+    const element = countRef.current;
+    if (!element) return;
+    let animationFrame;
+
+    observerRef.current = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          let startTime = null;
+
+          const animateCount = (timestamp) => {
+            if (!startTime) startTime = timestamp;
+            const progress = timestamp - startTime;
+            const percentage = Math.min(progress / duration, 1);
+
+            // Easing function for smooth animation
+            const easeOutQuart = 1 - Math.pow(1 - percentage, 4);
+            const currentCount = Math.floor(easeOutQuart * end);
+
+            setCount(currentCount);
+
+            if (progress < duration) {
+              animationFrame = requestAnimationFrame(animateCount);
+            } else {
+              setCount(end);
+            }
+          };
+
+          animationFrame = requestAnimationFrame(animateCount);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    observerRef.current.observe(element);
+
+    return () => {
+      if (observerRef.current) {
+        observerRef.current.disconnect();
+      }
+      if (animationFrame) {
+        cancelAnimationFrame(animationFrame);
+      }
+    };
+  }, [end, duration]);
+
+  return (
+    <span ref={countRef}>
+      {count}
+      {suffix}
+    </span>
+  );
+};
 
 const WhyUs = () => {
   const features = [
@@ -17,84 +76,111 @@ const WhyUs = () => {
       title: "Expertise & Innovation",
       description:
         "Years of experienced personnel with cutting-edge capabilities",
-      gradient: "from-blue-500 to-cyan-500",
+      gradient: "from-[#006AAB] to-[#0088CC]",
       delay: "0",
     },
     {
       icon: <Database size={48} />,
       title: "Data-Driven Strategies",
       description: "Strategic decisions powered by insights and analytics",
-      gradient: "from-purple-500 to-pink-500",
+      gradient: "from-[#004A7C] to-[#006AAB]",
       delay: "100",
     },
     {
       icon: <Users size={48} />,
       title: "Customer-Centric",
       description: "Tailored services, committed to your satisfaction",
-      gradient: "from-green-500 to-teal-500",
+      gradient: "from-[#0088CC] to-[#00A8FF]",
       delay: "200",
     },
     {
       icon: <Award size={48} />,
       title: "Quality & Reliability",
       description: "High standards, integrity, and efficiency",
-      gradient: "from-orange-500 to-red-500",
+      gradient: "from-[#006AAB] to-[#72BBDA]",
       delay: "300",
     },
     {
       icon: <Shield size={48} />,
       title: "Competitive & Sustainable",
       description: "Affordable solutions with long-term support",
-      gradient: "from-indigo-500 to-purple-500",
+      gradient: "from-[#004A7C] to-[#0088CC]",
       delay: "400",
     },
     {
       icon: <TrendingUp size={48} />,
       title: "Complete Service",
       description: "End-to-end marketing solutions for your business",
-      gradient: "from-teal-500 to-blue-500",
+      gradient: "from-[#0088CC] to-[#006AAB]",
       delay: "500",
     },
   ];
 
+  const stats = [
+    {
+      number: 50,
+      label: "Projects Completed",
+      color: "text-[#72BBDA]",
+      suffix: "+",
+    },
+    {
+      number: 30,
+      label: "Happy Clients",
+      color: "text-[#72BBDA]",
+      suffix: "+",
+    },
+    {
+      number: 5,
+      label: "Years Experience",
+      color: "text-[#72BBDA]",
+      suffix: "+",
+    },
+    {
+      number: 98,
+      label: "Client Satisfaction",
+      color: "text-[#72BBDA]",
+      suffix: "%",
+    },
+  ];
+
   return (
-    <section className="py-20 relative overflow-hidden bg-gradient-to-br from-slate-800 via-gray-900 to-slate-800">
+    <section className="py-20 relative overflow-hidden bg-gradient-to-br from-[#002A4D] via-[#004A7C] to-[#006AAB]">
       {/* Unique Background Pattern */}
-      <div className="absolute inset-0 opacity-5">
+      <div className="absolute inset-0 opacity-10">
         <div
           className="absolute inset-0"
           style={{
-            backgroundImage: `radial-gradient(circle at 25% 25%, rgba(120, 119, 198, 0.3) 0%, transparent 50%), 
-                           radial-gradient(circle at 75% 75%, rgba(255, 119, 198, 0.2) 0%, transparent 50%)`,
+            backgroundImage: `radial-gradient(circle at 25% 25%, rgba(0, 106, 171, 0.4) 0%, transparent 50%), 
+                           radial-gradient(circle at 75% 75%, rgba(114, 187, 218, 0.3) 0%, transparent 50%)`,
             backgroundSize: "50% 50%",
           }}
         ></div>
       </div>
 
       {/* Geometric Pattern Overlay */}
-      <div className="absolute inset-0 opacity-10">
+      <div className="absolute inset-0 opacity-15">
         <div
           className="absolute inset-0"
           style={{
-            backgroundImage: `linear-gradient(30deg, transparent 49%, rgba(59, 130, 246, 0.1) 50%, transparent 51%),
-                           linear-gradient(150deg, transparent 49%, rgba(139, 92, 246, 0.1) 50%, transparent 51%)`,
+            backgroundImage: `linear-gradient(30deg, transparent 49%, rgba(255, 255, 255, 0.1) 50%, transparent 51%),
+                           linear-gradient(150deg, transparent 49%, rgba(255, 255, 255, 0.08) 50%, transparent 51%)`,
             backgroundSize: "60px 60px",
           }}
         ></div>
       </div>
 
-      {/* Floating Elements - Different from Hero */}
-      <div className="absolute top-20 left-20 w-32 h-32 bg-blue-500/10 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-float-slow"></div>
-      <div className="absolute top-1/3 right-32 w-24 h-24 bg-purple-500/10 rounded-full mix-blend-multiply filter blur-3xl opacity-25 animate-float-slow delay-75"></div>
-      <div className="absolute bottom-32 left-1/4 w-28 h-28 bg-indigo-500/10 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-float-slow delay-150"></div>
+      {/* Floating Elements */}
+      <div className="absolute top-20 left-20 w-32 h-32 bg-[#0088CC] rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-float-slow"></div>
+      <div className="absolute top-1/3 right-32 w-24 h-24 bg-[#72BBDA] rounded-full mix-blend-multiply filter blur-3xl opacity-25 animate-float-slow delay-75"></div>
+      <div className="absolute bottom-32 left-1/4 w-28 h-28 bg-[#006AAB] rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-float-slow delay-150"></div>
 
       {/* Animated Grid Lines */}
-      <div className="absolute inset-0 opacity-5">
+      <div className="absolute inset-0 opacity-10">
         <div
           className="absolute inset-0"
           style={{
-            backgroundImage: `linear-gradient(90deg, transparent 24px, rgba(59, 130, 246, 0.1) 25px, transparent 26px),
-                           linear-gradient(0deg, transparent 24px, rgba(139, 92, 246, 0.1) 25px, transparent 26px)`,
+            backgroundImage: `linear-gradient(90deg, transparent 24px, rgba(255, 255, 255, 0.1) 25px, transparent 26px),
+                           linear-gradient(0deg, transparent 24px, rgba(255, 255, 255, 0.1) 25px, transparent 26px)`,
             backgroundSize: "50px 50px",
           }}
         ></div>
@@ -102,8 +188,8 @@ const WhyUs = () => {
 
       <div className="container mx-auto px-6 relative z-10">
         <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-3 bg-white/5 backdrop-blur-lg rounded-full px-8 py-4 mb-6 animate-fade-in-up border border-white/10 shadow-2xl">
-            <Sparkles className="text-yellow-400" size={28} />
+          <div className="inline-flex items-center gap-3 bg-white/10 backdrop-blur-lg rounded-full px-8 py-4 mb-6 animate-fade-in-up border border-white/20 shadow-2xl">
+            <Sparkles className="text-[#72BBDA]" size={28} />
             <span className="text-white font-semibold text-lg tracking-wide">
               Why We Stand Out
             </span>
@@ -111,22 +197,34 @@ const WhyUs = () => {
 
           <h2 className="text-5xl md:text-7xl font-black text-white mb-6 animate-fade-in-up">
             Why Choose{" "}
-            <span className="text-white text-transparent">
+            <span className="text-white">
               Pr
               <img
-                src="mark.png"
-                alt="ProAddis Logo"
-                style={{ width: "auto", height: "50px", display: "inline" }}
+                src="logos/mark.png"
+                alt="o"
+                style={{
+                  width: "auto",
+                  height: "50px",
+                  display: "inline",
+                  filter: "brightness(0) invert(1)",
+                }}
               />
               Addis
             </span>
             ?
           </h2>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto animate-fade-in-up leading-relaxed">
+          <p className="text-xl text-[#E6F3FF] max-w-3xl mx-auto animate-fade-in-up leading-relaxed">
             We don't just create campaigns; we build{" "}
-            <span className="font-semibold">lasting partnerships</span> that
-            drive <span className="font-semibold">measurable growth</span> and{" "}
-            <span className=" font-semibold">sustainable success</span>.
+            <span className="text-white font-semibold">
+              lasting partnerships
+            </span>{" "}
+            that drive{" "}
+            <span className="text-white font-semibold">measurable growth</span>{" "}
+            and{" "}
+            <span className="text-white font-semibold">
+              sustainable success
+            </span>
+            .
           </p>
         </div>
 
@@ -134,16 +232,16 @@ const WhyUs = () => {
           {features.map((feature, index) => (
             <div
               key={index}
-              className="group relative bg-white/5 backdrop-blur-lg rounded-3xl p-8 text-center text-white hover-lift transition-all duration-500 border border-white/10 hover:border-white/20 overflow-hidden"
+              className="group relative bg-white/10 backdrop-blur-lg rounded-3xl p-8 text-center text-white hover-lift transition-all duration-500 border border-white/20 hover:border-[#72BBDA] overflow-hidden"
               style={{ animationDelay: `${feature.delay}ms` }}
             >
               {/* Animated Background */}
               <div
-                className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} opacity-0 group-hover:opacity-5 transition-opacity duration-500`}
+                className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-500`}
               ></div>
 
               {/* Animated Border Glow */}
-              <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-transparent via-white/20 to-transparent transform -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+              <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-transparent via-[#72BBDA] to-transparent transform -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
 
               <div className="relative z-10">
                 {/* Icon Container */}
@@ -154,66 +252,55 @@ const WhyUs = () => {
                   <div className="absolute -inset-4 bg-gradient-to-r from-white/20 to-transparent rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                 </div>
 
-                {/* Title with Gradient Text */}
-                <h3 className="text-2xl font-bold mb-4 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-blue-300 group-hover:to-purple-300 group-hover:bg-clip-text transition-all duration-300">
+                {/* Title */}
+                <h3 className="text-2xl font-bold mb-4 text-white group-hover:text-[#E6F3FF] transition-all duration-300">
                   {feature.title}
                 </h3>
 
                 {/* Description */}
-                <p className="text-gray-300 leading-relaxed group-hover:text-white transition-colors duration-300 text-lg">
+                <p className="text-[#CCE6FF] leading-relaxed group-hover:text-white transition-colors duration-300 text-lg">
                   {feature.description}
                 </p>
               </div>
 
               {/* Corner Accents */}
-              <div className="absolute top-4 right-4 w-3 h-3 bg-blue-400 rounded-full opacity-0 group-hover:opacity-100 group-hover:animate-ping transition-opacity duration-300"></div>
-              <div className="absolute bottom-4 left-4 w-2 h-2 bg-purple-400 rounded-full opacity-0 group-hover:opacity-100 group-hover:animate-ping transition-opacity duration-300 delay-150"></div>
+              <div className="absolute top-4 right-4 w-3 h-3 bg-[#72BBDA] rounded-full opacity-0 group-hover:opacity-100 group-hover:animate-ping transition-opacity duration-300"></div>
+              <div className="absolute bottom-4 left-4 w-2 h-2 bg-[#0088CC] rounded-full opacity-0 group-hover:opacity-100 group-hover:animate-ping transition-opacity duration-300 delay-150"></div>
             </div>
           ))}
         </div>
 
-        {/* Enhanced Bottom CTA */}
-        {/* <div className="text-center mt-16 animate-fade-in-up delay-700">
-          <div className="bg-gradient-to-r from-blue-600/30 via-purple-600/30 to-cyan-600/30 backdrop-blur-xl rounded-3xl p-12 max-w-6xl mx-auto border border-white/20 hover-lift transition-all duration-500 group">
-            <div className="flex items-center justify-center gap-6 mb-6">
-              <Heart
-                className="text-pink-400 group-hover:scale-110 transition-transform duration-300"
-                size={40}
-              />
-              <span className="text-3xl text-white font-light italic bg-gradient-to-r from-white to-blue-100 bg-clip-text text-transparent">
-                "Strategic Marketing Solutions"
-              </span>
-              <Heart
-                className="text-pink-400 group-hover:scale-110 transition-transform duration-300"
-                size={40}
-              />
-            </div>
-            <p className="text-xl text-blue-100 group-hover:text-white transition-colors duration-300 max-w-4xl mx-auto leading-relaxed">
-              Let us be your strategic partner in navigating Ethiopia's
-              competitive business landscape. Together, we'll transform
-              challenges into opportunities and goals into achievements.
-            </p>
-
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-8">
-              {[
-                { number: "50+", label: "Successful Projects" },
-                { number: "30+", label: "Happy Clients" },
-                { number: "5+", label: "Years Experience" },
-                { number: "98%", label: "Client Satisfaction" },
-              ].map((stat, index) => (
+        {/* Stats Section with Animated Counters */}
+        <div className="text-center mt-16 animate-fade-in-up">
+          <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-12 border border-white/20 max-w-6xl mx-auto hover-lift transition-all duration-500 group">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+              {stats.map((stat, index) => (
                 <div
                   key={index}
                   className="text-center group-hover:scale-105 transition-transform duration-300"
                 >
-                  <div className="text-2xl md:text-3xl font-black text-white">
-                    {stat.number}
+                  <div
+                    className={`text-3xl md:text-4xl font-black ${stat.color} mb-2`}
+                  >
+                    <Counter
+                      end={stat.number}
+                      duration={2500}
+                      suffix={stat.suffix}
+                    />
                   </div>
-                  <div className="text-blue-200 text-sm mt-1">{stat.label}</div>
+                  <div className="text-[#CCE6FF] font-medium">{stat.label}</div>
                 </div>
               ))}
             </div>
+
+            {/* Bottom Quote */}
+            <div className="mt-8 pt-8 border-t border-white/20">
+              <p className="text-xl text-[#E6F3FF] italic">
+                "Walking your path to success with data-driven excellence"
+              </p>
+            </div>
           </div>
-        </div> */}
+        </div>
       </div>
     </section>
   );
