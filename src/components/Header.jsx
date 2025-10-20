@@ -4,7 +4,7 @@ import { Menu, X } from "lucide-react";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
+  const [scrolled, setScrolled] = useState(true);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -17,7 +17,7 @@ const Header = () => {
   return (
     <header
       className={`fixed w-full z-50 transition-all duration-300 ${
-        scrolled ? "glass py-2" : "py-4"
+        scrolled ? "glass py-2" : "hidden" //"py-4"
       }`}
     >
       <nav className="container mx-auto px-6 flex justify-between items-center">

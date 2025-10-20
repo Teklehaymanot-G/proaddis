@@ -46,9 +46,8 @@ const Portfolio = () => {
     {
       id: 4,
       title: "Valtra Logistics Logo Design",
-      category: "web",
-      image:
-        "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=500",
+      category: "logo",
+      image: "logos/valtra.jpg",
       description: "Logo design for Valtra Logistics",
       technologies: ["Logo", "Brand Color", "Letterhead Design"],
     },
