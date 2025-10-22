@@ -22,12 +22,11 @@ const Hero = () => {
         setCurrentText((currentText + 1) % texts.length);
         setCurrentIndex(0);
         setDisplayedText("");
-      }, 4000); // Longer pause before restarting
+      }, 4000);
       return () => clearTimeout(timeout);
     }
   }, [currentIndex, currentText]);
 
-  // Hide scroll indicator when user starts scrolling
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 100) {
@@ -44,28 +43,33 @@ const Hero = () => {
   return (
     <section
       id="home"
-      className="relative flex flex-col justify-between min-h-screen overflow-hidden"
-      style={{}}
+      className="relative flex flex-col justify-between min-h-screen sm:min-h-screen md:min-h-screen lg:min-h-screen xl:min-h-screen overflow-hidden"
     >
-      {/* Video on md+ screens, image fallback on small screens */}
+      {/* Enhanced responsive video background */}
       <div className="absolute inset-0 -z-10">
+        {/* Video for all screens with proper sizing */}
         <video
-          className="hidden md:block w-full h-full object-cover"
+          className="w-full h-full object-cover"
           autoPlay
           loop
           muted
           playsInline
           preload="auto"
           poster="/hero-poster.jpg"
+          // Add these styles for better mobile performance
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            objectPosition: "center",
+          }}
         >
           <source src="/Comp 3.mp4" type="video/mp4" />
+          {/* Fallback for browsers that don't support video */}
+          Your browser does not support the video tag.
         </video>
 
-        {/* Fallback background image for small screens */}
-        <div
-          className="md:hidden w-full h-full bg-cover bg-center"
-          style={{ backgroundImage: "url('/hero-poster.jpg')" }}
-        />
+        {/* Optional: Gradient overlay for better text readability */}
       </div>
     </section>
   );
