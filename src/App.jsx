@@ -16,7 +16,10 @@ function App() {
   return (
     <div className="app">
       <Header />
-      <Hero />
+      {/* Added id="hero" so the header can detect it */}
+      <section id="hero">
+        <Hero />
+      </section>
       <section id="whyus">
         <WhyUs />
       </section>

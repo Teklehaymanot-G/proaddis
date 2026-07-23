@@ -69,7 +69,7 @@ const Contact = () => {
           }
         });
       },
-      { threshold: 0.1 }
+      { threshold: 0.1 },
     );
 
     if (sectionRef.current) {
@@ -86,14 +86,14 @@ const Contact = () => {
 
     try {
       const response = await fetch(
-        "https://contact-api.proaddismarketing.com/api/contact",
+        "https://contact-proaddis.amatiya.com/api/contact",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(formData),
-        }
+        },
       );
 
       const result = await response.json();

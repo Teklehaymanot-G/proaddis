@@ -6,8 +6,9 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState(null);
+  const [isHeroVisible, setIsHeroVisible] = useState(true); // hero is visible initially
 
-  // 1. Track scroll position for the "glass" fallback
+  // 1. Track scroll position
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
@@ -16,7 +17,22 @@ const Header = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // 2. Intersection Observer – resets when no special section is visible
+  // 2. Detect if Hero section is in view
+  useEffect(() => {
+    const hero = document.getElementById("hero");
+    if (!hero) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsHeroVisible(entry.isIntersecting);
+      },
+      { threshold: 0.2 }, // 20% of hero visible to trigger
+    );
+    observer.observe(hero);
+    return () => observer.disconnect();
+  }, []);
+
+  // 3. Intersection Observer for special sections (WhyUs, Process, Portfolio)
   useEffect(() => {
     const sectionIds = ["whyus", "process", "portfolio"];
     const sections = sectionIds
@@ -27,32 +43,24 @@ const Header = () => {
 
     const observer = new IntersectionObserver(
       (entries) => {
-        // Check if any of the observed sections is intersecting
         const isAnyIntersecting = entries.some((entry) => entry.isIntersecting);
         if (isAnyIntersecting) {
-          // Find the first one that is intersecting (or you can pick the one with highest ratio)
           const visibleEntry = entries.find((entry) => entry.isIntersecting);
           setActiveSection(visibleEntry.target.id);
         } else {
-          // None of the special sections are visible → reset
           setActiveSection(null);
         }
       },
-      {
-        root: null,
-        rootMargin: "0px",
-        threshold: 0.3, // 30% of the section must be visible
-      },
+      { threshold: 0.3 },
     );
 
     sections.forEach((section) => observer.observe(section));
-
     return () => {
       sections.forEach((section) => observer.unobserve(section));
     };
   }, []);
 
-  // Determine header classes
+  // Determine header styles
   const isSpecialSection =
     activeSection && ["whyus", "process", "portfolio"].includes(activeSection);
 
@@ -62,29 +70,31 @@ const Header = () => {
   let menuBg = "bg-transparent";
 
   if (isSpecialSection) {
-    // 🔵 White background + blue text for these sections
     headerBg = "bg-white shadow-md";
     headerText = "text-blue-900";
     logo = "logos/logo2.png";
     menuBg = "bg-white shadow-lg border-t border-gray-200";
   } else if (scrolled) {
-    // 🪟 Glass effect when scrolled but not in special sections
     headerBg = "glass py-2";
     headerText = "text-blue-900";
     logo = "logos/logo2.png";
     menuBg = "bg-white shadow-lg border-t border-gray-200";
   } else {
-    // 🌟 Transparent at the very top
     headerBg = "bg-transparent py-4";
     headerText = "text-white";
     logo = "logos/logo.png";
     menuBg = "glass";
   }
 
+  // Hide header when hero is visible (override everything)
+  const headerClasses = `fixed w-full z-50 transition-all duration-300 ${
+    isHeroVisible
+      ? "opacity-0 pointer-events-none"
+      : "opacity-100 pointer-events-auto"
+  } ${headerBg}`;
+
   return (
-    <header
-      className={`fixed w-full z-50 transition-all duration-300 ${headerBg}`}
-    >
+    <header className={headerClasses}>
       <nav className="container mx-auto px-6 flex justify-between items-center">
         <div className="flex items-center space-x-2 slide-in-left">
           <img src={logo} alt="ProAddis Logo" className="w-auto h-[45px]" />
