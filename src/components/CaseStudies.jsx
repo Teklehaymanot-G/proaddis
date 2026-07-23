@@ -8,7 +8,7 @@ const CaseStudies = () => {
       challenge: "Low brand recognition in competitive education market",
       solution: "Comprehensive branding strategy with digital marketing",
       results: "300% increase in enrollment, 150% brand awareness growth",
-      image: "warkka.png",
+      image: "/projects/warka-website.png",
       services: ["Brand Strategy", "Digital Advertising", "PR Campaign"],
     },
     {
@@ -16,7 +16,7 @@ const CaseStudies = () => {
       challenge: "Market saturation with international paint brands",
       solution: "Localized branding and distribution network expansion",
       results: "40% sales growth, expanded to 3 new regions",
-      image: "/images/case-studies/abay-esdee.jpg",
+      image: "/projects/abay-website.png",
       services: [
         "Distribution Strategy",
         "Brand Positioning",

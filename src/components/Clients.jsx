@@ -25,6 +25,12 @@ const Clients = () => {
       project: "Packaging Design & Traditional Advertising",
     },
     {
+      name: "Yonathan BT Furniture",
+      logo: "logos/yonathan.jpeg",
+      category: "Furniture",
+      project: "Brand Identity & Market Positioning",
+    },
+    {
       name: "Valtra Logistics",
       logo: "logos/VALTRA Logistics.jpg",
       category: "Transportation",

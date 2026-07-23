@@ -1,15 +1,14 @@
-// Update src/App.jsx
+// src/App.jsx
 import "./styles/animations.css";
 import Header from "./components/Header";
 import Hero from "./components/Hero";
 import WhyUs from "./components/WhyUs";
-import Process from "./components/Process"; // New
+import Process from "./components/Process";
 import Services from "./components/Services";
 import Clients from "./components/Clients";
 import Portfolio from "./components/Portfolio";
-import CaseStudies from "./components/CaseStudies"; // New
-import Testimonials from "./components/Testimonials"; // New
-import Team from "./components/Team"; // New
+import CaseStudies from "./components/CaseStudies";
+import Testimonials from "./components/Testimonials";
 import Contact from "./components/Contact";
 import Footer from "./components/Footer";
 
@@ -18,14 +17,19 @@ function App() {
     <div className="app">
       <Header />
       <Hero />
-      <WhyUs />
+      <section id="whyus">
+        <WhyUs />
+      </section>
       <Services />
-      <Process /> {/* Add Process section */}
+      <section id="process">
+        <Process />
+      </section>
       <Clients />
-      <Portfolio />
-      <CaseStudies /> {/* Add Case Studies */}
-      <Testimonials /> {/* Add Testimonials */}
-      {/* <Team />  */}
+      <section id="portfolio">
+        <Portfolio />
+      </section>
+      <CaseStudies />
+      <Testimonials />
       <Contact />
       <Footer />
     </div>

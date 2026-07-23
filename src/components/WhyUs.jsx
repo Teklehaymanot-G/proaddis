@@ -46,7 +46,7 @@ const Counter = ({ end, duration = 2000, suffix = "" }) => {
           animationFrame = requestAnimationFrame(animateCount);
         }
       },
-      { threshold: 0.1 }
+      { threshold: 0.1 },
     );
 
     observerRef.current.observe(element);
@@ -118,25 +118,25 @@ const WhyUs = () => {
 
   const stats = [
     {
-      number: 50,
+      number: 40,
       label: "Projects Completed",
       color: "text-[#72BBDA]",
       suffix: "+",
     },
     {
-      number: 30,
+      number: 25,
       label: "Happy Clients",
       color: "text-[#72BBDA]",
       suffix: "+",
     },
     {
-      number: 5,
+      number: 2,
       label: "Years Experience",
       color: "text-[#72BBDA]",
       suffix: "+",
     },
     {
-      number: 98,
+      number: 94,
       label: "Client Satisfaction",
       color: "text-[#72BBDA]",
       suffix: "%",
