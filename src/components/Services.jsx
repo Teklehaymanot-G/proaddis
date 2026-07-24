@@ -9,6 +9,9 @@ import {
   TrendingUp,
   Tv,
   Users,
+  Train,
+  Car,
+  Monitor,
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
@@ -43,17 +46,31 @@ const Services = () => {
       color: "from-[#72BBDA] to-[#006AAB]",
     },
     {
-      icon: <Tv size={48} />,
-      title: "Traditional Advertising",
-      description: "TV, Radio, Print, Billboards, Signage, and Packaging",
-      color: "from-[#3B82F6] to-[#7C3AED]",
-    },
-    {
       icon: <Users size={48} />,
       title: "Digital Advertising",
       description: "Search Engine, Social Media, and Display Advertising",
       color: "from-[#006AAB] to-[#4F46E5]",
     },
+    // ----- NEW SERVICES (replacing Traditional Advertising) -----
+    {
+      icon: <Train size={48} />,
+      title: "Train Advertising",
+      description: "Train branding and advertising solutions",
+      color: "from-[#F59E0B] to-[#F97316]",
+    },
+    {
+      icon: <Car size={48} />,
+      title: "Car Branding",
+      description: "Vehicle branding and fleet advertising",
+      color: "from-[#10B981] to-[#34D399]",
+    },
+    {
+      icon: <Monitor size={48} />,
+      title: "Digital Screen",
+      description: "Digital signage, LED screens, and interactive displays",
+      color: "from-[#8B5CF6] to-[#EC4899]",
+    },
+    // ------------------------------------------------------------
     {
       icon: <HeartHandshake size={48} />,
       title: "Public Relations",
@@ -94,7 +111,7 @@ const Services = () => {
           }
         });
       },
-      { threshold: 0.1 }
+      { threshold: 0.1 },
     );
 
     if (sectionRef.current) {
@@ -115,7 +132,7 @@ const Services = () => {
           <div className="inline-flex items-center gap-3 bg-white/80 backdrop-blur-sm rounded-full px-6 py-3 mb-6 animate-fade-in-up border border-blue-200">
             <Target className="text-[#006AAB]" size={24} />
             <span className="text-[#005F94] font-semibold">
-              Marketing Solutions{" "}
+              Marketing Solutions
             </span>
           </div>
 
@@ -126,7 +143,6 @@ const Services = () => {
             Powered by Data and Creative Excellence
           </p>
 
-          {/* Updated Tags with Brand Colors */}
           <div className="flex flex-wrap justify-center gap-3 mt-6">
             {[
               "Creative",
@@ -168,28 +184,10 @@ const Services = () => {
               <p className="text-gray-600 text-center text-sm leading-relaxed group-hover:text-gray-700 transition-colors duration-300">
                 {service.description}
               </p>
-
-              {/* Hover effect line */}
               <div className="w-0 h-0.5 bg-gradient-to-r from-[#006AAB] to-[#72BBDA] mx-auto mt-4 group-hover:w-12 transition-all duration-300"></div>
             </div>
           ))}
         </div>
-
-        {/* CTA Section */}
-        {/* <div className="text-center mt-16 animate-fade-in-up">
-          <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-8 text-white max-w-4xl mx-auto shadow-2xl hover-lift transition-all duration-300">
-            <h3 className="text-2xl md:text-3xl font-bold mb-4">
-              Ready to Transform Your Business?
-            </h3>
-            <p className="text-blue-100 mb-6 max-w-2xl mx-auto">
-              Let's discuss how our data-driven marketing strategies can drive
-              your success in the Ethiopian market.
-            </p>
-            <button className="bg-white text-blue-600 px-8 py-3 rounded-full font-semibold hover-lift transform hover:scale-105 transition-all duration-300 shadow-lg">
-              Start Your Project
-            </button>
-          </div>
-        </div> */}
       </div>
     </section>
   );
