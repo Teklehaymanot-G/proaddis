@@ -31,7 +31,7 @@ const Contact = () => {
     {
       icon: <Phone size={32} />,
       title: "Phone",
-      details: ["+251 (988) 11-88-88", "+251 (964) 22-28-88"],
+      details: ["+251 (988) 11-88-88", "+251 (912) 17-38-76"],
       color: "from-blue-500 to-cyan-500",
       delay: "0",
     },

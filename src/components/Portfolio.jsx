@@ -40,10 +40,10 @@ const Portfolio = () => {
 
     {
       id: 10,
-      title: "Yonathan BT Furniture Social Media",
+      title: "Yonatan BT Furniture Social Media",
       category: "social media", // now properly under "social media"
       image: "projects/yonathan.png",
-      description: "Social media management for Yonathan BT Furniture",
+      description: "Social media management for Yonatan BT Furniture",
       technologies: ["Instagram", "Facebook", "Content Creation"],
       liveUrl: "https://www.tiktok.com/@yonatanbtfurniture",
     },

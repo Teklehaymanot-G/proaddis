@@ -6,20 +6,20 @@ const Testimonials = () => {
     {
       quote:
         "ProAddis transformed our brand presence in Ethiopia. Their data-driven approach delivered exceptional results.",
-      author: "Warka Academy Strength Co. Ltd",
-      position: "CEO",
+      author: "Warka Academy",
+      position: "Manager",
     },
     {
       quote:
         "The team's understanding of the local market combined with international standards is remarkable.",
       author: "Abay Esdee Paints",
-      position: "Marketing Manager",
+      position: "CEO",
     },
     {
       quote:
         "From strategy to execution, ProAddis delivered beyond our expectations. True partners in growth.",
-      author: "Grace Trading",
-      position: "Director",
+      author: "Yonatan BT Furniture",
+      position: "Marketing Manager",
     },
   ];
 
