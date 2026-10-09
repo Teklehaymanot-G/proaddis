@@ -154,6 +154,13 @@ const Dashboard = () => {
                       badText="Off"
                       to="/settings/analytics"
                     />
+                    <StatusRow
+                      label="Analytics reports"
+                      ok={system.analyticsReportsConnected}
+                      okText="Connected"
+                      badText="Not connected"
+                      to="/settings/analytics"
+                    />
                   </>
                 )}
                 {backups && (

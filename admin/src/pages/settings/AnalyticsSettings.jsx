@@ -6,6 +6,7 @@ import { api } from "../../api/client";
 import PageHeader from "../../components/PageHeader";
 import PageState from "../../components/PageState";
 import useSettings from "./useSettings";
+import AnalyticsReportsCard from "./AnalyticsReportsCard";
 
 const ID_PATTERN = /^G-[A-Za-z0-9]{4,20}$/;
 
@@ -45,7 +46,7 @@ const AnalyticsSettings = () => {
     <>
       <PageHeader
         title="Google Analytics"
-        description="Measure how many people visit the website and what they look at."
+        description="Track visits to the website and show the reports in this admin."
       />
 
       <PageState loading={!settings && !error} error={error} onRetry={load}>
@@ -94,6 +95,13 @@ const AnalyticsSettings = () => {
               </Button>
             </Form>
           </Card>
+
+          {settings?.analyticsReports && (
+            <AnalyticsReportsCard
+              status={settings.analyticsReports}
+              onChange={(analyticsReports) => patch({ analyticsReports })}
+            />
+          )}
 
           <Card title="Where to find the Measurement ID">
             <Steps

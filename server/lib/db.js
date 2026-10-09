@@ -3,7 +3,7 @@ const fs = require("fs");
 const path = require("path");
 const mysql = require("mysql2/promise");
 const { ROOT, DATA_DIR } = require("./paths");
-const { DEFAULT_ROLES } = require("./permissions");
+const { DEFAULT_ROLES, PERMISSION_KEYS } = require("./permissions");
 const { hashPassword } = require("./password");
 
 const config = {
@@ -105,7 +105,13 @@ const count = async (table) =>
   (await query(`SELECT COUNT(*) AS total FROM ${table}`))[0].total;
 
 const seedRoles = async () => {
-  if ((await count("roles")) > 0) return;
+  if ((await count("roles")) > 0) {
+    // The built-in role always holds every permission, including new ones
+    await query("UPDATE roles SET permissions = ? WHERE is_system = 1", [
+      JSON.stringify(PERMISSION_KEYS),
+    ]);
+    return;
+  }
   for (const role of DEFAULT_ROLES) {
     await query(
       "INSERT INTO roles (name, description, permissions, is_system, created_at) VALUES (?, ?, ?, ?, ?)",

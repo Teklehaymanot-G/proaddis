@@ -13,6 +13,7 @@ import Reveal from "./Reveal";
 import SocialLinks from "./SocialLinks";
 import { useContent } from "../content/ContentContext";
 import { API_URL, telHref } from "../lib/api";
+import { CONTACT_SENT_EVENT, track } from "../lib/analytics";
 
 const EMPTY_FORM = {
   name: "",
@@ -110,6 +111,7 @@ const Contact = () => {
 
       if (result.success) {
         setSubmitStatus("success");
+        track(CONTACT_SENT_EVENT);
         setFormData(EMPTY_FORM);
       } else {
         setSubmitStatus("error");

@@ -33,6 +33,11 @@ const DEFAULTS = {
     enabled: false,
     measurementId: "",
   },
+  // Connection used to show visitor reports in the admin
+  analyticsReports: {
+    propertyId: "",
+    credentials: "", // service account key, stored encrypted
+  },
 };
 
 const get = async (name) => {

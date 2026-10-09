@@ -135,6 +135,14 @@ export const api = {
   testSmtp: (to) => post("/api/admin/settings/smtp/test", { to }),
   saveContactForm: (form) => put("/api/admin/settings/contact-form", form),
   saveAnalytics: (analytics) => put("/api/admin/settings/analytics", analytics),
+  saveAnalyticsReports: (connection) =>
+    put("/api/admin/settings/analytics-reports", connection),
+  clearAnalyticsReports: () => del("/api/admin/settings/analytics-reports"),
+
+  // Analytics reports
+  analyticsStatus: () => request("/api/admin/analytics/status"),
+  analyticsReport: (days, fresh) =>
+    request(`/api/admin/analytics/report?days=${days}${fresh ? "&fresh=1" : ""}`),
 
   // Backups
   getBackups: () => request("/api/admin/backups"),

@@ -4,6 +4,7 @@ const express = require("express");
 const db = require("../lib/db");
 const auth = require("../lib/auth");
 const settings = require("../lib/settings");
+const analyticsReports = require("../lib/analytics");
 const { BACKUP_DIR } = require("../lib/paths");
 
 const router = express.Router();
@@ -62,6 +63,7 @@ router.get("/", auth.requireAuth, async (req, res) => {
     overview.system = {
       emailConfigured: smtp.source !== "none",
       analyticsEnabled: analytics.enabled && Boolean(analytics.measurementId),
+      analyticsReportsConnected: (await analyticsReports.getStatus()).configured,
     };
   }
 

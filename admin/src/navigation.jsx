@@ -3,6 +3,7 @@
 // checks are all built from it. Add a new module by adding an entry here.
 import {
   AppstoreOutlined,
+  BarChartOutlined,
   CloudServerOutlined,
   DashboardOutlined,
   FileTextOutlined,
@@ -13,6 +14,7 @@ import {
 } from "@ant-design/icons";
 import Dashboard from "./pages/Dashboard";
 import Messages from "./pages/Messages";
+import Analytics from "./pages/Analytics";
 import Users from "./pages/Users";
 import Roles from "./pages/Roles";
 import Backups from "./pages/Backups";
@@ -52,6 +54,13 @@ export const navigation = [
     permissions: ["messages.view", "messages.manage"],
     element: <Messages />,
     badge: "unreadMessages",
+  },
+  {
+    path: "/analytics",
+    label: "Analytics",
+    icon: <BarChartOutlined />,
+    permissions: ["analytics.view"],
+    element: <Analytics />,
   },
   {
     path: "/access",

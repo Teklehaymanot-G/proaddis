@@ -2,6 +2,7 @@ const express = require("express");
 const auth = require("../lib/auth");
 const settings = require("../lib/settings");
 const sendEmail = require("../lib/email");
+const analytics = require("../lib/analytics");
 
 const router = express.Router();
 
@@ -18,6 +19,7 @@ const readAll = async () => ({
   smtp: await settings.getSmtpForAdmin(),
   contactForm: await settings.getContactForm(),
   analytics: await settings.get("analytics"),
+  analyticsReports: await analytics.getStatus(),
   envRecipient: process.env.CONTACT_EMAIL || "",
 });
 
@@ -136,6 +138,35 @@ router.put("/analytics", async (req, res) => {
   const analytics = { enabled, measurementId };
   await settings.set("analytics", analytics);
   res.json({ success: true, analytics });
+});
+
+// ---- Google Analytics reports (shown on the Analytics page) ----
+
+router.put("/analytics-reports", async (req, res) => {
+  const propertyId = text(req.body?.propertyId, 30);
+  const keyText =
+    typeof req.body?.serviceAccountKey === "string" ? req.body.serviceAccountKey : "";
+
+  if (!/^\d{4,15}$/.test(propertyId)) {
+    return fail(
+      res,
+      "The Property ID is a number such as 123456789 (not the G- Measurement ID)",
+    );
+  }
+
+  try {
+    await analytics.saveConfig({ propertyId, keyText });
+  } catch (error) {
+    if (!(error instanceof analytics.AnalyticsError)) throw error;
+    return fail(res, error.message);
+  }
+
+  res.json({ success: true, analyticsReports: await analytics.getStatus() });
+});
+
+router.delete("/analytics-reports", async (req, res) => {
+  await analytics.clearConfig();
+  res.json({ success: true, analyticsReports: await analytics.getStatus() });
 });
 
 module.exports = router;

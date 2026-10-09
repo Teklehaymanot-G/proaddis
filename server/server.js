@@ -38,6 +38,7 @@ app.use("/api/admin/users", require("./routes/users"));
 app.use("/api/admin/roles", require("./routes/roles"));
 app.use("/api/admin/settings", require("./routes/settings"));
 app.use("/api/admin/backups", require("./routes/backups"));
+app.use("/api/admin/analytics", require("./routes/analytics"));
 
 // Health check
 app.get("/api/health", (req, res) => {

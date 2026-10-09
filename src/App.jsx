@@ -11,8 +11,11 @@ import CaseStudies from "./components/CaseStudies";
 import Testimonials from "./components/Testimonials";
 import Contact from "./components/Contact";
 import Footer from "./components/Footer";
+import { useSectionTracking } from "./lib/analytics";
 
 function App() {
+  useSectionTracking();
+
   return (
     <div className="app">
       <Header />

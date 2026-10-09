@@ -25,6 +25,12 @@ const PERMISSIONS = [
     description: "Mark messages as read or unread and delete them.",
   },
   {
+    key: "analytics.view",
+    group: "Analytics",
+    label: "View analytics",
+    description: "See website visitor statistics from Google Analytics.",
+  },
+  {
     key: "users.manage",
     group: "Access",
     label: "Manage users",
@@ -67,6 +73,7 @@ const DEFAULT_ROLES = [
       "content.edit",
       "messages.view",
       "messages.manage",
+      "analytics.view",
     ],
     isSystem: false,
   },
