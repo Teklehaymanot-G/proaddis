@@ -22,3 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Created by the server at runtime
+server/data
+server/uploads
+server/backups

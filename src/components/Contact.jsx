@@ -1,83 +1,90 @@
 // src/components/Contact.jsx
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 import {
   Mail,
   Phone,
   MapPin,
   Send,
-  MessageCircle,
-  Target,
-  Star,
-  Navigation,
-  Facebook,
-  Twitter,
-  Instagram,
-  Linkedin,
-  Youtube,
+  Clock,
+  CheckCircle2,
+  AlertCircle,
 } from "lucide-react";
+import Reveal from "./Reveal";
+import SocialLinks from "./SocialLinks";
+import { useContent } from "../content/ContentContext";
+import { API_URL, telHref } from "../lib/api";
+
+const EMPTY_FORM = {
+  name: "",
+  email: "",
+  phone: "",
+  company: "",
+  subject: "",
+  message: "",
+};
+
+const EXTRA_FIELDS = [
+  {
+    name: "phone",
+    label: "Phone Number",
+    type: "tel",
+    autoComplete: "tel",
+    placeholder: "Enter your phone number",
+  },
+  {
+    name: "company",
+    label: "Company",
+    type: "text",
+    autoComplete: "organization",
+    placeholder: "Enter your company name",
+  },
+  {
+    name: "subject",
+    label: "Subject",
+    type: "text",
+    autoComplete: "off",
+    placeholder: "What is this about?",
+  },
+];
 
 const Contact = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    message: "",
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [visibleItems, setVisibleItems] = useState([]);
-  const [submitStatus, setSubmitStatus] = useState("");
-  const sectionRef = useRef(null);
+  const { settings, contact, contactForm } = useContent();
+
+  // Extra fields switched on under Settings → Contact form in the admin
+  const extraFields = EXTRA_FIELDS.filter(
+    (field) => contactForm.fields[field.name]?.show,
+  );
 
   const contactInfo = [
     {
-      icon: <Phone size={32} />,
+      icon: Phone,
       title: "Phone",
-      details: ["+251 (988) 11-88-88", "+251 (912) 17-38-76"],
-      color: "from-blue-500 to-cyan-500",
-      delay: "0",
+      details: settings.phones.map((text) => ({ text, href: telHref(text) })),
     },
     {
-      icon: <Mail size={32} />,
+      icon: Mail,
       title: "Email",
-      details: ["proaddismarketing@gmail.com", "contact@proaddismarketing.com"],
-      color: "from-[#72BBDA] to-pink-500",
-      delay: "100",
+      details: settings.emails.map((text) => ({
+        text,
+        href: `mailto:${text}`,
+      })),
     },
     {
-      icon: <MapPin size={32} />,
+      icon: MapPin,
       title: "Address",
-      details: [
-        "Mexico to Kera road, next to Total station",
-        "Metamen Building 2nd Floor",
-        "Addis Ababa, Ethiopia",
-      ],
-      color: "from-cyan-500 to-blue-500",
-      delay: "200",
+      details: settings.addressLines.map((text) => ({ text })),
     },
-  ];
+    {
+      icon: Clock,
+      title: "Business Hours",
+      details: settings.hours.map((text) => ({ text })),
+    },
+  ].filter((info) => info.details.length > 0);
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setVisibleItems([]);
-            contactInfo.forEach((_, index) => {
-              setTimeout(() => {
-                setVisibleItems((prev) => [...prev, index]);
-              }, index * 200);
-            });
-          }
-        });
-      },
-      { threshold: 0.1 },
-    );
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, []);
+  const [formData, setFormData] = useState(EMPTY_FORM);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -85,46 +92,40 @@ const Contact = () => {
     setSubmitStatus("");
 
     try {
-      const response = await fetch(
-        "https://contact-proaddis.amatiya.com/api/contact",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
+      const response = await fetch(`${API_URL}/api/contact`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
+        body: JSON.stringify(
+          Object.fromEntries(
+            ["name", "email", "message", ...extraFields.map((f) => f.name)].map(
+              (name) => [name, formData[name]],
+            ),
+          ),
+        ),
+      });
 
       const result = await response.json();
 
       if (result.success) {
         setSubmitStatus("success");
-        setFormData({ name: "", email: "", message: "" });
-
-        // Reset status after 5 seconds
-        setTimeout(() => {
-          setSubmitStatus("");
-        }, 5000);
+        setFormData(EMPTY_FORM);
       } else {
         setSubmitStatus("error");
+        setErrorMessage(result.error || "");
         console.error("Submission error:", result.error);
-
-        // Reset status after 5 seconds
-        setTimeout(() => {
-          setSubmitStatus("");
-        }, 5000);
       }
     } catch (error) {
       console.error("Network error:", error);
+      setErrorMessage("");
       setSubmitStatus("error");
-
+    } finally {
+      setIsSubmitting(false);
       // Reset status after 5 seconds
       setTimeout(() => {
         setSubmitStatus("");
       }, 5000);
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
@@ -135,144 +136,78 @@ const Contact = () => {
     });
   };
 
-  // Google Maps embed URL for the location
-  const mapUrl =
-    "https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d4686.315735894789!2d38.74791207639912!3d8.999167625171903!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2set!4v1760343776295!5m2!1sen!2set";
-
   return (
-    <section
-      id="contact"
-      ref={sectionRef}
-      className="py-20 bg-gradient-to-br from-slate-50 to-blue-50 relative overflow-hidden"
-    >
-      {/* Background Elements */}
-      <div className="absolute top-10 right-10 w-20 h-20 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-float"></div>
-      <div className="absolute bottom-20 left-10 w-16 h-16 bg-purple-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-float delay-75"></div>
-      <div className="absolute top-1/2 left-1/4 w-24 h-24 bg-cyan-200 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-float delay-150"></div>
-
-      <div className="container mx-auto px-6 relative z-10">
-        <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-3 bg-white/80 backdrop-blur-sm rounded-full px-6 py-3 mb-6 animate-fade-in-up border border-blue-200 shadow-sm">
-            <MessageCircle className="text-[#006AAB]" size={24} />
-            <span className="text-[#006AAB] font-semibold">Get In Touch</span>
-          </div>
-
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4 animate-fade-in-up">
-            Contact{" "}
-            <span className="bg-gradient-to-r from-[#006AAB] to-[#72BBDA] bg-clip-text text-transparent">
-              Us
-            </span>
-          </h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto animate-fade-in-up">
-            Let's map your journey to success together.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
+    <section id="contact" className="section bg-slate-50">
+      <div className="shell">
+        <div className="overflow-hidden rounded-[2rem] bg-brand-950 shadow-lift lg:grid lg:grid-cols-12">
           {/* Contact Info */}
-          <div className="space-y-8">
-            <div className="animate-fade-in-up">
-              <h3 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3">
-                <Target className="text-[#006AAB]" size={28} />
-                Connect With Us
-              </h3>
+          <div className="relative overflow-hidden p-8 text-white md:p-12 lg:col-span-5">
+            <div className="grid-texture pointer-events-none absolute inset-0"></div>
+            <div className="pointer-events-none absolute -bottom-32 -left-24 h-80 w-80 rounded-full bg-brand-600/30 blur-[100px]"></div>
 
-              <div className="space-y-6">
-                {contactInfo.map((info, index) => (
-                  <div
-                    key={index}
-                    className={`group bg-white rounded-2xl p-6 hover-lift transition-all duration-500 border border-gray-100 hover:border-blue-200 shadow-sm hover:shadow-xl ${
-                      visibleItems.includes(index)
-                        ? "opacity-100 transform translate-x-0"
-                        : "opacity-0 transform -translate-x-10"
-                    }`}
-                    style={{ transitionDelay: `${info.delay}ms` }}
-                  >
-                    <div className="flex items-start gap-4">
-                      <div
-                        className={`w-14 h-14 rounded-2xl bg-gradient-to-r ${info.color} flex items-center justify-center text-white shadow-lg transform group-hover:scale-110 transition-transform duration-300`}
-                      >
-                        {info.icon}
+            <Reveal className="relative">
+              <span className="eyebrow mb-5 !text-brand-300">
+                {contact.eyebrow}
+              </span>
+              <h2 className="display text-white">{contact.title}</h2>
+              <p className="mt-5 max-w-sm text-lg leading-relaxed text-brand-100/70">
+                {contact.description}
+              </p>
+
+              <ul className="mt-10 space-y-7">
+                {contactInfo.map((info) => {
+                  const Icon = info.icon;
+                  return (
+                    <li key={info.title} className="flex gap-4">
+                      <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-2xl bg-white/5 text-brand-300 ring-1 ring-inset ring-white/10">
+                        <Icon size={20} strokeWidth={1.75} />
                       </div>
-                      <div className="flex-1">
-                        <h4 className="text-lg font-bold text-gray-800 mb-2 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-[#006AAB] group-hover:to-purple-600 group-hover:bg-clip-text transition-all duration-300">
+                      <div>
+                        <h3 className="text-xs font-semibold uppercase tracking-[0.14em] text-brand-100/50">
                           {info.title}
-                        </h4>
-                        <div className="space-y-1">
-                          {info.details.map((detail, idx) => (
-                            <p
-                              key={idx}
-                              className="text-gray-600 group-hover:text-gray-700 transition-colors duration-300"
-                            >
-                              {detail}
-                            </p>
-                          ))}
+                        </h3>
+                        <div className="mt-1.5 space-y-0.5 text-sm text-white">
+                          {info.details.map((detail, detailIndex) =>
+                            detail.href ? (
+                              <a
+                                key={detailIndex}
+                                href={detail.href}
+                                className="block break-all transition-colors hover:text-brand-300"
+                              >
+                                {detail.text}
+                              </a>
+                            ) : (
+                              <p key={detailIndex}>{detail.text}</p>
+                            ),
+                          )}
                         </div>
                       </div>
-                    </div>
-
-                    <div className="w-0 h-0.5 bg-gradient-to-r from-blue-500 to-[#72BBDA] mt-3 group-hover:w-full transition-all duration-500"></div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Additional Info Card */}
-            {/* <div className="bg-gradient-to-r from-[#006AAB] to-[#72BBDA] rounded-2xl p-6 text-white shadow-2xl hover-lift transition-all duration-300 animate-fade-in-up">
-              <div className="flex items-center gap-3 mb-4">
-                <Star className="text-yellow-300" size={24} />
-                <h4 className="text-xl font-bold">Why Choose Us?</h4>
-              </div>
-              <ul className="space-y-2 text-blue-100">
-                <li className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-white rounded-full"></div>
-                  Quick response within 24 hours
-                </li>
-                <li className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-white rounded-full"></div>
-                  Free initial consultation
-                </li>
-                <li className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-white rounded-full"></div>
-                  Customized solutions for your business
-                </li>
-                <li className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-white rounded-full"></div>
-                  Ongoing support and maintenance
-                </li>
+                    </li>
+                  );
+                })}
               </ul>
-            </div> */}
+
+              {/* Social Media Links */}
+              <SocialLinks className="mt-10" />
+            </Reveal>
           </div>
 
           {/* Contact Form */}
-          <div className="animate-fade-in-up">
-            <div className="bg-white rounded-2xl p-8 shadow-2xl hover-lift transition-all duration-300 border border-gray-100">
-              <h3 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3">
-                <Send className="text-[#006AAB]" size={28} />
-                Send us a Message
+          <div className="bg-white p-8 md:p-12 lg:col-span-7">
+            <Reveal delay={100}>
+              <h3 className="font-display text-2xl font-bold tracking-tight text-ink">
+                {contact.formTitle}
               </h3>
+              <p className="mt-2 text-sm text-slate-500">
+                {contact.formNote}
+              </p>
 
-              {/* Status Messages */}
-              {submitStatus === "success" && (
-                <div className="mb-6 p-4 bg-green-100 border border-green-400 text-green-700 rounded-2xl animate-fade-in-up">
-                  ✅ Thank you! Your message has been sent successfully. We'll
-                  get back to you soon.
-                </div>
-              )}
-
-              {submitStatus === "error" && (
-                <div className="mb-6 p-4 bg-red-100 border border-red-400 text-red-700 rounded-2xl animate-fade-in-up">
-                  ❌ Sorry, there was an error sending your message. Please try
-                  again or contact us directly.
-                </div>
-              )}
-
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="group">
+              <form onSubmit={handleSubmit} className="mt-8 space-y-5">
+                <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+                  <div>
                     <label
                       htmlFor="name"
-                      className="block text-gray-700 font-medium mb-2 group-hover:text-[#006AAB] transition-colors duration-300"
+                      className="mb-2 block text-sm font-medium text-slate-700"
                     >
                       Your Name *
                     </label>
@@ -280,18 +215,19 @@ const Contact = () => {
                       type="text"
                       id="name"
                       name="name"
+                      autoComplete="name"
                       value={formData.name}
                       onChange={handleChange}
-                      className="w-full px-4 py-3 rounded-2xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#006AAB] focus:border-transparent transition-all duration-300 bg-white group-hover:border-[#006AAB]"
+                      className="field"
                       required
                       placeholder="Enter your full name"
                     />
                   </div>
 
-                  <div className="group">
+                  <div>
                     <label
                       htmlFor="email"
-                      className="block text-gray-700 font-medium mb-2 group-hover:text-[#72BBDA] transition-colors duration-300"
+                      className="mb-2 block text-sm font-medium text-slate-700"
                     >
                       Your Email *
                     </label>
@@ -299,19 +235,56 @@ const Contact = () => {
                       type="email"
                       id="email"
                       name="email"
+                      autoComplete="email"
                       value={formData.email}
                       onChange={handleChange}
-                      className="w-full px-4 py-3 rounded-2xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#72BBDA] focus:border-transparent transition-all duration-300 bg-white group-hover:border-cyan-300"
+                      className="field"
                       required
                       placeholder="Enter your email address"
                     />
                   </div>
                 </div>
 
-                <div className="group">
+                {extraFields.length > 0 && (
+                  <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+                    {extraFields.map((field, index) => {
+                      const required = contactForm.fields[field.name].required;
+                      const alone =
+                        extraFields.length % 2 === 1 &&
+                        index === extraFields.length - 1;
+                      return (
+                        <div
+                          key={field.name}
+                          className={alone ? "md:col-span-2" : ""}
+                        >
+                          <label
+                            htmlFor={field.name}
+                            className="mb-2 block text-sm font-medium text-slate-700"
+                          >
+                            {field.label}
+                            {required ? " *" : " (optional)"}
+                          </label>
+                          <input
+                            type={field.type}
+                            id={field.name}
+                            name={field.name}
+                            autoComplete={field.autoComplete}
+                            value={formData[field.name]}
+                            onChange={handleChange}
+                            className="field"
+                            required={required}
+                            placeholder={field.placeholder}
+                          />
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+
+                <div>
                   <label
                     htmlFor="message"
-                    className="block text-gray-700 font-medium mb-2 group-hover:text-cyan-600 transition-colors duration-300"
+                    className="mb-2 block text-sm font-medium text-slate-700"
                   >
                     Your Message *
                   </label>
@@ -321,161 +294,86 @@ const Contact = () => {
                     value={formData.message}
                     onChange={handleChange}
                     rows="6"
-                    className="w-full px-4 py-3 rounded-2xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all duration-300 bg-white resize-none group-hover:border-cyan-300"
+                    className="field resize-none"
                     required
                     placeholder="Tell us about your project or inquiry..."
                   ></textarea>
                 </div>
 
+                {!contactForm.enabled && (
+                  <p className="flex items-start gap-3 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800">
+                    <AlertCircle size={18} className="mt-0.5 flex-shrink-0" />
+                    The contact form is currently unavailable. Please reach us
+                    by phone or email instead.
+                  </p>
+                )}
+
                 <button
                   type="submit"
-                  disabled={isSubmitting}
-                  className={`w-full py-4 rounded-2xl font-semibold hover-lift transition-all duration-300 flex items-center justify-center gap-3 group relative overflow-hidden ${
-                    isSubmitting
-                      ? "bg-gray-400 cursor-not-allowed"
-                      : "bg-gradient-to-r from-[#006AAB] to-[#72BBDA] hover:from-[#006AAB] hover:to-[#72BBDA] shadow-lg transform hover:scale-105"
-                  }`}
+                  disabled={isSubmitting || !contactForm.enabled}
+                  className="btn-primary w-full !py-4 disabled:cursor-not-allowed disabled:opacity-60"
                 >
-                  <span className="relative z-10 text-white flex items-center gap-2">
-                    {isSubmitting ? (
-                      <>
-                        <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                        Sending...
-                      </>
-                    ) : (
-                      <>
-                        <Send
-                          size={20}
-                          className="group-hover:translate-x-1 transition-transform duration-300"
-                        />
-                        Send Message
-                      </>
-                    )}
-                  </span>
-
-                  {!isSubmitting && (
-                    <div className="absolute inset-0 bg-gradient-to-r from-[#006AAB] to-[#72BBDA] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"></div>
+                  {isSubmitting ? (
+                    <>
+                      <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></span>
+                      Sending...
+                    </>
+                  ) : (
+                    <>
+                      <Send size={17} />
+                      Send Message
+                    </>
                   )}
                 </button>
 
-                <p className="text-center text-gray-500 text-sm">
-                  We'll get back to you within 24 hours. Your information is
-                  secure with us.
-                </p>
-              </form>
-            </div>
+                {/* Status Messages */}
+                <div aria-live="polite">
+                  {submitStatus === "success" && (
+                    <p className="flex items-start gap-3 rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-800">
+                      <CheckCircle2 size={18} className="mt-0.5 flex-shrink-0" />
+                      {contactForm.successMessage}
+                    </p>
+                  )}
 
-            {/* Social Media Links */}
-            <div className="flex justify-center gap-4 mt-8">
-              {[
-                {
-                  name: "Facebook",
-                  color: "bg-blue-500 hover:bg-[#006AAB]",
-                  icon: <Facebook />,
-                },
-                {
-                  name: "Twitter",
-                  color: "bg-cyan-500 hover:bg-cyan-600",
-                  icon: <Twitter />,
-                },
-                {
-                  name: "Instagram",
-                  color: "bg-pink-500 hover:bg-pink-600",
-                  icon: <Instagram />,
-                },
-                {
-                  name: "LinkedIn",
-                  color: "bg-blue-700 hover:bg-blue-800",
-                  icon: <Linkedin />,
-                },
-                {
-                  name: "YouTube",
-                  color: "bg-red-500 hover:bg-red-600",
-                  icon: <Youtube />,
-                },
-              ].map((social, index) => (
-                <a
-                  key={social.name}
-                  href="#"
-                  className={`w-12 h-12 rounded-2xl ${social.color} text-white flex items-center justify-center hover-lift transform hover:scale-110 transition-all duration-300 shadow-lg animate-fade-in-up`}
-                  style={{ animationDelay: `${index * 100 + 500}ms` }}
-                  title={social.name}
-                >
-                  <span className="font-semibold text-xs">{social.icon}</span>
-                </a>
-              ))}
-            </div>
+                  {submitStatus === "error" && (
+                    <p className="flex items-start gap-3 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-800">
+                      <AlertCircle size={18} className="mt-0.5 flex-shrink-0" />
+                      {errorMessage ||
+                        "Sorry, there was an error sending your message. Please try again or contact us directly."}
+                    </p>
+                  )}
+                </div>
+              </form>
+            </Reveal>
           </div>
         </div>
 
         {/* Interactive Map Section */}
-        <div className="mt-16 animate-fade-in-up">
-          <div className="bg-gradient-to-r from-[#006AAB] to-[#72BBDA] rounded-2xl p-8 text-center text-white shadow-2xl">
-            <div className="flex items-center justify-center gap-3 mb-6">
-              <Navigation className="text-yellow-300" size={32} />
-              <h3 className="text-2xl md:text-3xl font-bold">
-                Visit Our Office
+        {settings.mapUrl && (
+        <Reveal className="mt-8">
+          <div className="overflow-hidden rounded-[2rem] border border-slate-200 bg-white shadow-soft">
+            <div className="flex flex-col gap-1 p-6 md:flex-row md:items-center md:justify-between md:px-8">
+              <h3 className="font-display text-lg font-semibold text-ink">
+                {contact.mapTitle}
               </h3>
+              <p className="text-sm text-slate-500">
+                {contact.mapDescription}
+              </p>
             </div>
-            <p className="text-blue-100 mb-6 max-w-2xl mx-auto text-lg">
-              Located in the heart of Addis Ababa, easily accessible from major
-              routes
-            </p>
-
-            {/* Interactive Google Map */}
-            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-1 border border-white/30 hover-lift transition-all duration-300">
-              <div className="rounded-2xl overflow-hidden shadow-2xl">
-                <iframe
-                  src={mapUrl}
-                  width="100%"
-                  height="400"
-                  style={{ border: 0, borderRadius: "16px" }}
-                  allowFullScreen=""
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                  title="ProAddis Marketing Office Location"
-                  className="rounded-2xl"
-                ></iframe>
-              </div>
-            </div>
-
-            {/* Location Details */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8 text-left">
-              <div className="bg-white/10 rounded-2xl p-4 backdrop-blur-sm">
-                <h4 className="font-bold text-yellow-300 mb-2">📍 Location</h4>
-                <p className="text-blue-100 text-sm">
-                  Mexico to Kera road
-                  <br />
-                  Next to Total station
-                  <br />
-                  Metamen Building 2nd Floor
-                </p>
-              </div>
-              <div className="bg-white/10 rounded-2xl p-4 backdrop-blur-sm">
-                <h4 className="font-bold text-yellow-300 mb-2">
-                  🕒 Business Hours
-                </h4>
-                <p className="text-blue-100 text-sm">
-                  Mon - Fri: 8:30 AM - 5:30 PM
-                  <br />
-                  Saturday: 9:00 AM - 1:00 PM
-                  <br />
-                  Sunday: Closed
-                </p>
-              </div>
-              <div className="bg-white/10 rounded-2xl p-4 backdrop-blur-sm">
-                <h4 className="font-bold text-yellow-300 mb-2">Services</h4>
-                <p className="text-blue-100 text-sm">
-                  Branding &amp; Strategy
-                  <br />
-                  Digital Marketing &amp; SEO
-                  <br />
-                  Market Research &amp; Analytics
-                </p>
-              </div>
-            </div>
+            <iframe
+              src={settings.mapUrl}
+              width="100%"
+              height="400"
+              style={{ border: 0 }}
+              allowFullScreen=""
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              title="ProAddis Marketing Office Location"
+              className="block"
+            ></iframe>
           </div>
-        </div>
+        </Reveal>
+        )}
       </div>
     </section>
   );

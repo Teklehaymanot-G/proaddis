@@ -1,183 +1,47 @@
 // src/components/Clients.jsx
-import { useState, useRef, useEffect } from "react";
+import Reveal from "./Reveal";
+import { useContent } from "../content/ContentContext";
+import { assetUrl } from "../lib/api";
 
 const Clients = () => {
-  const sectionRef = useRef(null);
-  const scrollContainerRef = useRef(null);
+  const { clients: section } = useContent();
+  const clients = section.items;
 
-  const clients = [
-    {
-      name: "Warka Academy",
-      logo: "logos/warka.png",
-      category: "Education",
-      project: "Complete Branding & Marketing Strategy",
-    },
-    {
-      name: "Abay Esdee Paints",
-      logo: "logos/abay.png",
-      category: "Manufacturing",
-      project: "Distribution Strategy & Digital Advertising",
-    },
-    {
-      name: "Little Limited",
-      logo: "logos/little.png",
-      category: "Transportation",
-      project: "Packaging Design & Traditional Advertising",
-    },
-    {
-      name: "Yonathan BT Furniture",
-      logo: "logos/yonathan.jpeg",
-      category: "Furniture",
-      project: "Brand Identity & Market Positioning",
-    },
-    {
-      name: "Valtra Logistics",
-      logo: "logos/VALTRA Logistics.jpg",
-      category: "Transportation",
-      project: "Brand Identity & Market Positioning",
-    },
-    {
-      name: "Visa",
-      logo: "logos/visa.png",
-      category: "Finance",
-      project: "E-commerce Development & Digital Marketing",
-    },
-    {
-      name: "Bank of Abyssinia",
-      logo: "logos/BOA.png",
-      category: "Finance",
-      project: "E-commerce Development & Digital Marketing",
-    },
-    {
-      name: "Sika Chemical Engineering",
-      logo: "logos/sika.jpg",
-      category: "Manufacturing",
-      project: "E-commerce Development & Digital Marketing",
-    },
-    {
-      name: "Alema Farms",
-      logo: "logos/alema farms.jpg",
-      category: "Agro Industry",
-      project: "E-commerce Development & Digital Marketing",
-    },
-    {
-      name: "E-Mecce Agro",
-      logo: "logos/e mecce agro.png",
-      category: "Agro Industry",
-      project: "E-commerce Development & Digital Marketing",
-    },
-    {
-      name: "Dreamliner Hotel",
-      logo: "logos/dreamliner.webp",
-      category: "Hotel",
-      project: "E-commerce Development & Digital Marketing",
-    },
-    {
-      name: "Meneshaye",
-      logo: "logos/meneshaye.png",
-      category: "Kids Products",
-      project: "Megazine Ad.",
-    },
-    {
-      name: "Doue Dutch Vodka",
-      logo: "logos/Doue Dutch Vodka.png",
-      category: "Beverages",
-      project: "Printing Services",
-    },
-    {
-      name: "Fresco Juice",
-      logo: "logos/fresco.jpg",
-      category: "Logo Design",
-      project: "Logo Design",
-    },
-  ];
-
-  const filteredClients = clients;
-
-  // Duplicate clients for seamless infinite loop
-  const duplicatedClients = [
-    ...filteredClients,
-    ...filteredClients,
-    ...filteredClients,
-  ];
-
-  // JavaScript-based scroll animation as fallback
-  useEffect(() => {
-    if (!scrollContainerRef.current) return;
-
-    const container = scrollContainerRef.current;
-    let animationFrameId;
-    let startTime = null;
-    const duration = 40000; // 40 seconds for full scroll
-
-    const animateScroll = (timestamp) => {
-      if (!startTime) startTime = timestamp;
-      const progress = timestamp - startTime;
-
-      // Calculate scroll position (0% to 33.333% since we have 3 copies)
-      const scrollPosition = (progress / duration) * 33.333;
-
-      container.style.transform = `translateX(-${scrollPosition}%)`;
-
-      // Reset when complete
-      if (progress > duration) {
-        startTime = timestamp;
-      }
-
-      animationFrameId = requestAnimationFrame(animateScroll);
-    };
-
-    // Start animation after a short delay
-    const timeoutId = setTimeout(() => {
-      animationFrameId = requestAnimationFrame(animateScroll);
-    }, 1000);
-
-    return () => {
-      clearTimeout(timeoutId);
-      if (animationFrameId) {
-        cancelAnimationFrame(animationFrameId);
-      }
-    };
-  }, [filteredClients]);
+  // Two copies: the track slides by exactly half its width for a seamless loop
+  const track = [...clients, ...clients];
 
   return (
     <section
       id="clients"
-      ref={sectionRef}
-      className="py-20 bg-gradient-to-br from-gray-50 to-blue-50 overflow-hidden"
+      className="overflow-hidden border-y border-slate-200 bg-white py-16 md:py-20"
     >
-      <div className="container mx-auto px-6">
-        <div className="text-center ">
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
-            Our Valued Clients
+      <div className="shell">
+        <Reveal className="mb-10 flex flex-col items-center gap-3 text-center">
+          <span className="eyebrow">{section.eyebrow}</span>
+          <h2 className="font-display text-2xl font-bold tracking-tight text-ink md:text-3xl">
+            {section.title}
           </h2>
-        </div>
+        </Reveal>
+      </div>
 
-        {/* Single Row - Infinite Horizontal Scroll */}
-        <div className="relative overflow-hidden py-8">
-          <div
-            ref={scrollContainerRef}
-            className="flex space-x-8 min-w-max transition-transform duration-1000 ease-linear"
-          >
-            {duplicatedClients.map((client, index) => (
-              <div
-                key={`client-${index}`}
-                className="flex-shrink-0 bg-white rounded-2xl p-6 flex items-center justify-center transition-all duration-300 border border-gray-100 shadow-lg min-w-[160px] h-28 hover:shadow-xl hover:scale-105"
-              >
-                <img
-                  src={client.logo}
-                  alt={client.name}
-                  loading="lazy"
-                  className="max-h-14 max-w-[130px] object-contain mx-auto"
-                />
-              </div>
-            ))}
-          </div>
-
-          {/* Gradient overlays for smooth edges */}
-          <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-gray-50 to-transparent z-10"></div>
-          <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-gray-50 to-transparent z-10"></div>
-        </div>
+      {/* Single row – infinite horizontal scroll, pauses on hover */}
+      <div className="marquee-mask relative">
+        <ul className="flex w-max animate-marquee items-center">
+          {track.map((client, index) => (
+            <li
+              key={`${client.name}-${index}`}
+              aria-hidden={index >= clients.length}
+              className="mx-3 flex h-24 w-44 flex-shrink-0 items-center justify-center rounded-2xl border border-slate-100 bg-white px-6"
+            >
+              <img
+                src={assetUrl(client.logo)}
+                alt={client.name}
+                loading="lazy"
+                className="max-h-12 max-w-full object-contain opacity-70 grayscale transition-all duration-300 hover:opacity-100 hover:grayscale-0"
+              />
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
   );

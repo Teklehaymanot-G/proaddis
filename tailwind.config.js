@@ -5,7 +5,28 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["Lato", "sans-serif"],
+        sans: ["Inter", "system-ui", "sans-serif"],
+        display: ['"Plus Jakarta Sans"', "Inter", "system-ui", "sans-serif"],
+      },
+      colors: {
+        brand: {
+          50: "#f0f8fc",
+          100: "#dceef7",
+          200: "#b8dcee",
+          300: "#72BBDA",
+          400: "#3d9fcc",
+          500: "#1583bd",
+          600: "#006AAB",
+          700: "#00568c",
+          800: "#00436f",
+          900: "#06304d",
+          950: "#04182a",
+        },
+        ink: "#0b1722",
+      },
+      boxShadow: {
+        soft: "0 1px 2px rgba(4, 24, 42, 0.04), 0 8px 24px -8px rgba(4, 24, 42, 0.10)",
+        lift: "0 2px 4px rgba(4, 24, 42, 0.04), 0 24px 48px -16px rgba(4, 24, 42, 0.18)",
       },
       animation: {
         "fade-in-up": "fadeInUp 1s ease-out",
@@ -14,8 +35,13 @@ export default {
         bounce: "bounce 2s infinite",
         pulse: "pulse 2s infinite",
         "gradient-shift": "gradientShift 15s ease infinite",
+        marquee: "marquee 45s linear infinite",
       },
       keyframes: {
+        marquee: {
+          from: { transform: "translateX(0)" },
+          to: { transform: "translateX(-50%)" },
+        },
         fadeInUp: {
           from: {
             opacity: "0",

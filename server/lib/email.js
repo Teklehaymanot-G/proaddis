@@ -1,31 +1,38 @@
 const nodemailer = require("nodemailer");
-require("dotenv").config();
+const settings = require("./settings");
 
-const transporter = nodemailer.createTransport({
-  host: process.env.EMAIL_HOST,
-  port: process.env.EMAIL_PORT,
-  secure: false,
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASSWORD,
-  },
-});
+const createTransport = (smtp) =>
+  nodemailer.createTransport({
+    host: smtp.host,
+    port: smtp.port,
+    secure: smtp.secure,
+    auth: smtp.user ? { user: smtp.user, pass: smtp.password } : undefined,
+    connectionTimeout: 15000,
+    greetingTimeout: 15000,
+  });
 
-const sendEmail = async (mailOptions) => {
+const fromAddress = (smtp) => {
+  const email = smtp.fromEmail || smtp.user;
+  return smtp.fromName ? `"${smtp.fromName.replace(/"/g, "")}" <${email}>` : email;
+};
+
+// Sends with the current SMTP settings. Never throws: returns
+// { success, messageId } or { success: false, error }.
+const sendEmail = async (mailOptions, smtpOverride) => {
   try {
-    // Verify connection first
-    await transporter.verify();
-    console.log("Server is ready to send emails");
+    const smtp = smtpOverride || (await settings.getSmtp());
+    if (!smtp.host) {
+      return { success: false, error: "Email (SMTP) is not configured" };
+    }
 
-    const info = await transporter.sendMail({
+    const info = await createTransport(smtp).sendMail({
       ...mailOptions,
-      from: `"ProAddis Marketing" <${process.env.EMAIL_USER}>`,
+      from: fromAddress(smtp),
     });
 
-    console.log("Email sent:", info.messageId);
     return { success: true, messageId: info.messageId };
   } catch (error) {
-    console.error("Email error:", error);
+    console.error("Email error:", error.message);
     return { success: false, error: error.message };
   }
 };

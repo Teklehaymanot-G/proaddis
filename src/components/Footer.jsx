@@ -1,57 +1,61 @@
 // src/components/Footer.jsx
-import { useState } from "react";
-import {
-  Facebook,
-  Twitter,
-  Instagram,
-  Linkedin,
-  Mail,
-  Phone,
-  MapPin,
-  Send,
-} from "lucide-react";
+import { ArrowUpRight, Mail, Phone, MapPin } from "lucide-react";
+import SocialLinks from "./SocialLinks";
+import { useContent } from "../content/ContentContext";
+import { telHref } from "../lib/api";
+
+const companyLinks = [
+  { label: "About", href: "#about" },
+  { label: "Process", href: "#process" },
+  { label: "Portfolio", href: "#portfolio" },
+  { label: "Case Studies", href: "#case-studies" },
+  { label: "Contact", href: "#contact" },
+];
 
 const Footer = () => {
-  const [email, setEmail] = useState("");
-  const [submitted, setSubmitted] = useState(false);
-
-  const handleSubscribe = (e) => {
-    e.preventDefault();
-    if (!email) return;
-    // client-side only: simulate subscription
-    setSubmitted(true);
-    setEmail("");
-    setTimeout(() => setSubmitted(false), 3000);
-  };
-
+  const { footer } = useContent();
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-[#006AAB] text-white pt-14 pb-8">
-      <div className="container mx-auto px-6">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+    <footer className="bg-brand-950 text-white">
+      <div className="shell">
+        {/* Closing call to action */}
+        <div className="flex flex-col gap-8 border-b border-white/10 py-16 md:flex-row md:items-end md:justify-between md:py-20">
+          <h2 className="display max-w-2xl text-white">
+            {footer.ctaTitle}
+          </h2>
+          <a href="#contact" className="btn-light flex-shrink-0 self-start md:self-auto">
+            {footer.ctaLabel}
+            <ArrowUpRight size={16} />
+          </a>
+        </div>
+
+        <div className="grid grid-cols-2 gap-10 py-14 md:grid-cols-12">
           {/* Brand + Short */}
-          <div className="md:col-span-4">
-            <h3 className="text-2xl font-bold mb-3">ProAddis Marketing</h3>
-            <p className="text-blue-100 mb-6 max-w-md">
-              Provides strategic marketing solutions through creative,
-              innovative and data-driven insights to help organizations achieve
-              their goals and succeed in Ethiopia's volatile business landscape.
+          <div className="col-span-2 md:col-span-5">
+            <img
+              src="logos/logo.png"
+              alt="ProAddis Marketing"
+              className="h-10 w-auto"
+            />
+            <p className="mt-6 max-w-sm text-sm leading-relaxed text-brand-100/60">
+              {footer.description}
             </p>
+            <SocialLinks className="mt-6" />
           </div>
 
           {/* Links */}
           <div className="md:col-span-2">
-            <h4 className="text-lg font-semibold mb-3">Services</h4>
-            <ul className="space-y-2 text-blue-100">
-              {[
-                "Product Strategy",
-                "Digital Advertising",
-                "Branding",
-                "Web Development",
-              ].map((s) => (
-                <li key={s}>
-                  <a href="#services" className="hover:underline">
+            <h3 className="text-xs font-semibold uppercase tracking-[0.14em] text-brand-100/50">
+              Services
+            </h3>
+            <ul className="mt-5 space-y-3 text-sm">
+              {footer.serviceLinks.map((s, index) => (
+                <li key={`${s}-${index}`}>
+                  <a
+                    href="#services"
+                    className="text-brand-100/80 transition-colors hover:text-white"
+                  >
                     {s}
                   </a>
                 </li>
@@ -60,103 +64,60 @@ const Footer = () => {
           </div>
 
           <div className="md:col-span-2">
-            <h4 className="text-lg font-semibold mb-3">Company</h4>
-            <ul className="space-y-2 text-blue-100">
-              {["About", "Portfolio", "Careers", "Contact"].map((l) => (
-                <li key={l}>
-                  <a href={`#${l.toLowerCase()}`} className="hover:underline">
-                    {l}
+            <h3 className="text-xs font-semibold uppercase tracking-[0.14em] text-brand-100/50">
+              Company
+            </h3>
+            <ul className="mt-5 space-y-3 text-sm">
+              {companyLinks.map((l) => (
+                <li key={l.label}>
+                  <a
+                    href={l.href}
+                    className="text-brand-100/80 transition-colors hover:text-white"
+                  >
+                    {l.label}
                   </a>
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* Contact + Newsletter */}
-          <div className="md:col-span-4">
-            <h4 className="text-lg font-semibold mb-3">Contact</h4>
-            <div className="text-blue-100 space-y-2 mb-4">
-              <div className="flex items-center gap-2">
-                <MapPin size={16} />
-                <span>Addis Ababa, Ethiopia</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Phone size={16} />
-                <a href="tel:+251988118888" className="hover:underline">
-                  +251 988 11 8888
-                </a>
-              </div>
-              <div className="flex items-center gap-2">
-                <Mail size={16} />
-                <a href="mailto:hello@proaddis.com" className="hover:underline">
-                  hello@proaddis.com
-                </a>
-              </div>
-              <div className="flex items-center gap-3">
+          {/* Contact */}
+          <div className="col-span-2 md:col-span-3">
+            <h3 className="text-xs font-semibold uppercase tracking-[0.14em] text-brand-100/50">
+              Contact
+            </h3>
+            <ul className="mt-5 space-y-3 text-sm text-brand-100/80">
+              <li className="flex items-center gap-3">
+                <MapPin size={16} className="flex-shrink-0 text-brand-300" />
+                <span>{footer.location}</span>
+              </li>
+              <li className="flex items-center gap-3">
+                <Phone size={16} className="flex-shrink-0 text-brand-300" />
                 <a
-                  href="#"
-                  aria-label="Facebook"
-                  className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors"
+                  href={telHref(footer.phone)}
+                  className="transition-colors hover:text-white"
                 >
-                  <Facebook size={18} />
+                  {footer.phone}
                 </a>
+              </li>
+              <li className="flex items-center gap-3">
+                <Mail size={16} className="flex-shrink-0 text-brand-300" />
                 <a
-                  href="#"
-                  aria-label="Twitter"
-                  className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors"
+                  href={`mailto:${footer.email}`}
+                  className="transition-colors hover:text-white"
                 >
-                  <Twitter size={18} />
+                  {footer.email}
                 </a>
-                <a
-                  href="#"
-                  aria-label="Instagram"
-                  className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors"
-                >
-                  <Instagram size={18} />
-                </a>
-                <a
-                  href="#"
-                  aria-label="LinkedIn"
-                  className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors"
-                >
-                  <Linkedin size={18} />
-                </a>
-              </div>
-            </div>
-
-            {/* <h4 className="text-lg font-semibold mb-3">Subscribe</h4>
-            <form onSubmit={handleSubscribe} className="flex gap-2">
-              <label htmlFor="footer-email" className="sr-only">
-                Email address
-              </label>
-              <input
-                id="footer-email"
-                type="email"
-                placeholder="Your email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-3 py-2 rounded-lg text-gray-900"
-                aria-label="Email address"
-              />
-              <button
-                type="submit"
-                className="bg-white text-[#001827] px-4 py-2 rounded-lg flex items-center gap-2 hover:scale-105 transition-transform"
-                aria-label="Subscribe"
-              >
-                {submitted ? (
-                  "Thanks"
-                ) : (
-                  <>
-                    <Send size={14} /> <span>Join</span>
-                  </>
-                )}
-              </button>
-            </form> */}
+              </li>
+            </ul>
           </div>
         </div>
 
-        <div className="border-t border-white/10 mt-10 pt-6 text-sm text-blue-100 flex flex-col md:flex-row items-center justify-center gap-4">
-          &copy; {currentYear} ProAddis Marketing. All rights reserved.
+        <div className="flex flex-col items-center justify-between gap-3 border-t border-white/10 py-6 text-xs text-brand-100/50 md:flex-row">
+          <p>&copy; {currentYear} ProAddis Marketing. All rights reserved.</p>
+          <a href="#hero" className="transition-colors hover:text-white">
+            Back to top ↑
+          </a>
         </div>
       </div>
     </footer>

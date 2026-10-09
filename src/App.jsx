@@ -16,24 +16,17 @@ function App() {
   return (
     <div className="app">
       <Header />
-      {/* Added id="hero" so the header can detect it */}
-      <section id="hero">
+      <main>
         <Hero />
-      </section>
-      <section id="whyus">
         <WhyUs />
-      </section>
-      <Services />
-      <section id="process">
+        <Services />
         <Process />
-      </section>
-      <Clients />
-      <section id="portfolio">
+        <Clients />
         <Portfolio />
-      </section>
-      <CaseStudies />
-      <Testimonials />
-      <Contact />
+        <CaseStudies />
+        <Testimonials />
+        <Contact />
+      </main>
       <Footer />
     </div>
   );
