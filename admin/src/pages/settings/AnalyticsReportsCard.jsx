@@ -7,7 +7,6 @@ import {
   Alert,
   App,
   Button,
-  Card,
   Collapse,
   Form,
   Input,
@@ -18,6 +17,7 @@ import {
 } from "antd";
 import { ApiOutlined, FileTextOutlined, UploadOutlined } from "@ant-design/icons";
 import { api } from "../../api/client";
+import { FormPanel, FormSection } from "../../components/FormLayout";
 
 const { Text, Link: ExternalLink } = Typography;
 
@@ -77,8 +77,12 @@ const AnalyticsReportsCard = ({ status, onChange }) => {
   const needsKey = status.source !== "settings";
 
   return (
-    <Card title="Reports in this admin">
-      <Space direction="vertical" size={16} style={{ width: "100%", maxWidth: 720 }}>
+    <FormPanel>
+      <FormSection
+        title="Reports in this admin"
+        description="Lets the Analytics page read visitor numbers from Google with a service account."
+      >
+      <Space direction="vertical" size={16} style={{ width: "100%" }}>
         {status.configured ? (
           <Alert
             type="success"
@@ -115,7 +119,7 @@ const AnalyticsReportsCard = ({ status, onChange }) => {
               { pattern: /^\s*\d{4,15}\s*$/, message: "The Property ID contains only digits" },
             ]}
           >
-            <Input placeholder="123456789" inputMode="numeric" style={{ maxWidth: 240 }} />
+            <Input placeholder="123456789" inputMode="numeric" />
           </Form.Item>
 
           <Form.Item
@@ -226,7 +230,8 @@ const AnalyticsReportsCard = ({ status, onChange }) => {
           ]}
         />
       </Space>
-    </Card>
+      </FormSection>
+    </FormPanel>
   );
 };
 

@@ -1,11 +1,17 @@
 // src/pages/settings/SmtpSettings.jsx
 import { useEffect, useState } from "react";
-import { Alert, App, Button, Card, Col, Form, Input, InputNumber, Row, Space, Switch } from "antd";
+import { Alert, App, Button, Col, Form, Input, InputNumber, Row, Space } from "antd";
 import { SaveOutlined, SendOutlined } from "@ant-design/icons";
 import { api } from "../../api/client";
 import { useAuth } from "../../auth/AuthContext";
 import PageHeader from "../../components/PageHeader";
 import PageState from "../../components/PageState";
+import {
+  FormActions,
+  FormPanel,
+  FormSection,
+  SwitchField,
+} from "../../components/FormLayout";
 import useSettings from "./useSettings";
 
 const SOURCE_NOTICE = {
@@ -61,7 +67,10 @@ const SmtpSettings = () => {
     setTestResult(null);
     try {
       await api.testSmtp(to);
-      setTestResult({ type: "success", message: `Test email sent to ${to}. Check the inbox (and the spam folder).` });
+      setTestResult({
+        type: "success",
+        message: `Test email sent to ${to}. Check the inbox (and the spam folder).`,
+      });
     } catch (testError) {
       setTestResult({
         type: "error",
@@ -86,138 +95,144 @@ const SmtpSettings = () => {
         <Space direction="vertical" size={24} style={{ width: "100%" }}>
           {notice && <Alert showIcon {...notice} />}
 
-          <Card title="Mail server">
-            <Form
-              form={form}
-              layout="vertical"
-              requiredMark="optional"
-              onFinish={save}
-              onValuesChange={() => setDirty(true)}
-              style={{ maxWidth: 720 }}
+          <Form
+            form={form}
+            layout="vertical"
+            requiredMark="optional"
+            onFinish={save}
+            onValuesChange={() => setDirty(true)}
+          >
+            <FormPanel>
+              <FormSection
+                title="Mail server"
+                description="Where outgoing email is handed over. Your email provider lists these details as “SMTP settings”."
+              >
+                <Row gutter={16}>
+                  <Col xs={24} sm={16}>
+                    <Form.Item
+                      name="host"
+                      label="SMTP host"
+                      extra="Gmail: smtp.gmail.com"
+                      rules={[{ required: true, message: "Enter the SMTP host" }]}
+                    >
+                      <Input placeholder="smtp.example.com" />
+                    </Form.Item>
+                  </Col>
+                  <Col xs={24} sm={8}>
+                    <Form.Item
+                      name="port"
+                      label="Port"
+                      extra="Usually 587"
+                      rules={[{ required: true, message: "Enter the port" }]}
+                    >
+                      <InputNumber min={1} max={65535} style={{ width: "100%" }} />
+                    </Form.Item>
+                  </Col>
+                </Row>
+                <Form.Item name="secure" valuePropName="checked" noStyle>
+                  <SwitchField
+                    title="Use SSL"
+                    description="Turn on for port 465. Leave off for port 587, where encryption starts automatically."
+                  />
+                </Form.Item>
+              </FormSection>
+
+              <FormSection
+                title="Sign-in"
+                description="The account the server signs in with. The password is stored encrypted and never shown again."
+              >
+                <Form.Item name="user" label="Username" extra="Usually the full email address.">
+                  <Input autoComplete="off" />
+                </Form.Item>
+                <Form.Item
+                  name="password"
+                  label="Password"
+                  extra={
+                    smtp?.hasPassword
+                      ? "A password is saved. Leave empty to keep it."
+                      : "Gmail needs an App Password, not your normal password."
+                  }
+                >
+                  <Input.Password
+                    autoComplete="new-password"
+                    placeholder={smtp?.hasPassword ? "••••••••" : ""}
+                  />
+                </Form.Item>
+              </FormSection>
+
+              <FormSection
+                title="Sender"
+                description="How emails from the website appear in the recipient's inbox."
+              >
+                <Form.Item name="fromName" label="Sender name">
+                  <Input placeholder="ProAddis Marketing" />
+                </Form.Item>
+                <Form.Item
+                  name="fromEmail"
+                  label="Sender email"
+                  extra="Leave empty to use the username."
+                  rules={[{ type: "email", message: "Enter a valid email address" }]}
+                >
+                  <Input />
+                </Form.Item>
+              </FormSection>
+
+              <FormActions hint={dirty ? "You have unsaved changes" : "All changes saved"}>
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  icon={<SaveOutlined />}
+                  loading={saving}
+                  disabled={!dirty}
+                >
+                  Save email settings
+                </Button>
+              </FormActions>
+            </FormPanel>
+          </Form>
+
+          <FormPanel>
+            <FormSection
+              title="Send a test email"
+              description="Checks the saved settings by sending a real email."
             >
-              <Row gutter={16}>
-                <Col xs={24} sm={16}>
-                  <Form.Item
-                    name="host"
-                    label="SMTP host"
-                    extra="Gmail: smtp.gmail.com"
-                    rules={[{ required: true, message: "Enter the SMTP host" }]}
-                  >
-                    <Input placeholder="smtp.example.com" />
-                  </Form.Item>
-                </Col>
-                <Col xs={24} sm={8}>
-                  <Form.Item
-                    name="port"
-                    label="Port"
-                    extra="Usually 587, or 465 with SSL"
-                    rules={[{ required: true, message: "Enter the port" }]}
-                  >
-                    <InputNumber min={1} max={65535} style={{ width: "100%" }} />
-                  </Form.Item>
-                </Col>
-              </Row>
-
-              <Form.Item
-                name="secure"
-                label="Use SSL"
-                valuePropName="checked"
-                extra="Turn on for port 465. Leave off for port 587 (STARTTLS is used automatically)."
+              <Form
+                form={testForm}
+                layout="vertical"
+                requiredMark={false}
+                initialValues={{ to: user.email }}
+                onFinish={sendTest}
               >
-                <Switch />
-              </Form.Item>
-
-              <Row gutter={16}>
-                <Col xs={24} sm={12}>
-                  <Form.Item name="user" label="Username" extra="Usually the full email address.">
-                    <Input autoComplete="off" />
-                  </Form.Item>
-                </Col>
-                <Col xs={24} sm={12}>
-                  <Form.Item
-                    name="password"
-                    label="Password"
-                    extra={
-                      smtp?.hasPassword
-                        ? "A password is saved. Leave empty to keep it."
-                        : "Gmail needs an App Password, not your normal password."
-                    }
-                  >
-                    <Input.Password
-                      autoComplete="new-password"
-                      placeholder={smtp?.hasPassword ? "••••••••" : ""}
-                    />
-                  </Form.Item>
-                </Col>
-              </Row>
-
-              <Row gutter={16}>
-                <Col xs={24} sm={12}>
-                  <Form.Item name="fromName" label="Sender name">
-                    <Input placeholder="ProAddis Marketing" />
-                  </Form.Item>
-                </Col>
-                <Col xs={24} sm={12}>
-                  <Form.Item
-                    name="fromEmail"
-                    label="Sender email"
-                    extra="Leave empty to use the username."
-                    rules={[{ type: "email", message: "Enter a valid email address" }]}
-                  >
-                    <Input />
-                  </Form.Item>
-                </Col>
-              </Row>
-
-              <Button
-                type="primary"
-                htmlType="submit"
-                icon={<SaveOutlined />}
-                loading={saving}
-                disabled={!dirty}
-              >
-                Save email settings
-              </Button>
-            </Form>
-          </Card>
-
-          <Card title="Send a test email">
-            <Form
-              form={testForm}
-              layout="inline"
-              initialValues={{ to: user.email }}
-              onFinish={sendTest}
-            >
-              <Form.Item
-                name="to"
-                rules={[
-                  { required: true, message: "Enter an email address" },
-                  { type: "email", message: "Enter a valid email address" },
-                ]}
-              >
-                <Input placeholder="you@example.com" aria-label="Send test to" style={{ width: 280 }} />
-              </Form.Item>
-              <Form.Item>
+                <Form.Item
+                  name="to"
+                  label="Send to"
+                  rules={[
+                    { required: true, message: "Enter an email address" },
+                    { type: "email", message: "Enter a valid email address" },
+                  ]}
+                >
+                  <Input placeholder="you@example.com" />
+                </Form.Item>
                 <Button
                   htmlType="submit"
                   icon={<SendOutlined />}
                   loading={testing}
                   disabled={dirty || smtp?.source === "none"}
                 >
-                  Send test
+                  Send test email
                 </Button>
-              </Form.Item>
-            </Form>
-            {dirty && (
-              <Alert
-                type="info"
-                showIcon
-                message="Save your changes first: the test uses the saved settings."
-                style={{ marginTop: 16 }}
-              />
-            )}
-            {testResult && <Alert showIcon {...testResult} style={{ marginTop: 16 }} />}
-          </Card>
+              </Form>
+              {dirty && (
+                <Alert
+                  type="info"
+                  showIcon
+                  message="Save your changes first: the test uses the saved settings."
+                  style={{ marginTop: 16 }}
+                />
+              )}
+              {testResult && <Alert showIcon {...testResult} style={{ marginTop: 16 }} />}
+            </FormSection>
+          </FormPanel>
         </Space>
       </PageState>
     </>

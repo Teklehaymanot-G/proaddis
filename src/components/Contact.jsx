@@ -141,9 +141,9 @@ const Contact = () => {
   return (
     <section id="contact" className="section bg-slate-50">
       <div className="shell">
-        <div className="overflow-hidden rounded-[2rem] bg-brand-950 shadow-lift lg:grid lg:grid-cols-12">
+        <div className="overflow-hidden rounded-[2rem] bg-white shadow-lift lg:grid lg:grid-cols-12">
           {/* Contact Info */}
-          <div className="relative overflow-hidden p-8 text-white md:p-12 lg:col-span-5">
+          <div className="relative overflow-hidden bg-brand-950 p-6 text-white sm:p-8 md:p-12 lg:col-span-5">
             <div className="grid-texture pointer-events-none absolute inset-0"></div>
             <div className="pointer-events-none absolute -bottom-32 -left-24 h-80 w-80 rounded-full bg-brand-600/30 blur-[100px]"></div>
 
@@ -160,26 +160,28 @@ const Contact = () => {
                 {contactInfo.map((info) => {
                   const Icon = info.icon;
                   return (
-                    <li key={info.title} className="flex gap-4">
+                    <li key={info.title} className="flex gap-3 sm:gap-4">
                       <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-2xl bg-white/5 text-brand-300 ring-1 ring-inset ring-white/10">
                         <Icon size={20} strokeWidth={1.75} />
                       </div>
-                      <div>
+                      <div className="min-w-0">
                         <h3 className="text-xs font-semibold uppercase tracking-[0.14em] text-brand-100/50">
                           {info.title}
                         </h3>
-                        <div className="mt-1.5 space-y-0.5 text-sm text-white">
+                        <div className="mt-1 text-sm text-white">
                           {info.details.map((detail, detailIndex) =>
                             detail.href ? (
                               <a
                                 key={detailIndex}
                                 href={detail.href}
-                                className="block break-all transition-colors hover:text-brand-300"
+                                className="block py-1.5 [overflow-wrap:anywhere] transition-colors hover:text-brand-300"
                               >
                                 {detail.text}
                               </a>
                             ) : (
-                              <p key={detailIndex}>{detail.text}</p>
+                              <p key={detailIndex} className="py-0.5">
+                                {detail.text}
+                              </p>
                             ),
                           )}
                         </div>
@@ -195,7 +197,7 @@ const Contact = () => {
           </div>
 
           {/* Contact Form */}
-          <div className="bg-white p-8 md:p-12 lg:col-span-7">
+          <div className="bg-white p-6 sm:p-8 md:p-12 lg:col-span-7">
             <Reveal delay={100}>
               <h3 className="font-display text-2xl font-bold tracking-tight text-ink">
                 {contact.formTitle}

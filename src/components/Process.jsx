@@ -18,13 +18,13 @@ const Process = () => {
         />
 
         <div className="relative">
-          {/* Connecting line (desktop) */}
+          {/* Connecting line (single-row layout only) */}
           <div
             aria-hidden="true"
-            className="absolute left-0 right-0 top-7 hidden h-px bg-gradient-to-r from-brand-200 via-brand-300 to-brand-200 md:block"
+            className="absolute left-0 right-0 top-7 hidden h-px bg-gradient-to-r from-brand-200 via-brand-300 to-brand-200 lg:block"
           ></div>
 
-          <ol className="grid gap-10 md:auto-cols-fr md:grid-flow-col md:gap-6">
+          <ol className="grid gap-8 md:grid-cols-3 md:gap-x-6 md:gap-y-12 lg:auto-cols-fr lg:grid-flow-col lg:grid-cols-none">
           {steps.map((step, index) => {
             const Icon = getIcon(step.icon);
             return (

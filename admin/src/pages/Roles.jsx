@@ -20,6 +20,7 @@ import { api } from "../api/client";
 import { useAuth } from "../auth/AuthContext";
 import PageHeader from "../components/PageHeader";
 import PageState from "../components/PageState";
+import DataTable from "../components/DataTable";
 
 const Roles = () => {
   const { message } = App.useApp();
@@ -182,7 +183,7 @@ const Roles = () => {
 
       <PageState loading={!roles && !error} error={error} onRetry={load}>
         <Card styles={{ body: { padding: 0 } }}>
-          <Table
+          <DataTable
             rowKey="id"
             columns={columns}
             dataSource={roles || []}
@@ -198,14 +199,14 @@ const Roles = () => {
         onClose={() => setEditing(null)}
         width={520}
         destroyOnClose
-        extra={
+        footer={
           !readOnly && (
-            <Space>
+            <>
               <Button onClick={() => setEditing(null)}>Cancel</Button>
               <Button type="primary" loading={saving} onClick={() => form.submit()}>
-                {isNew ? "Create role" : "Save"}
+                {isNew ? "Create role" : "Save changes"}
               </Button>
-            </Space>
+            </>
           )
         }
       >

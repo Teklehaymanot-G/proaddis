@@ -26,6 +26,7 @@ import { api } from "../api/client";
 import { useAuth } from "../auth/AuthContext";
 import PageHeader from "../components/PageHeader";
 import PageState from "../components/PageState";
+import DataTable from "../components/DataTable";
 import { formatDateTime } from "../components/format";
 
 const Messages = () => {
@@ -192,7 +193,7 @@ const Messages = () => {
             )}
           </Space>
 
-          <Table
+          <DataTable
             rowKey="id"
             columns={columns}
             dataSource={visible}

@@ -14,8 +14,8 @@ import { formatDateTime } from "../components/format";
 
 const StatCard = ({ to, title, value, icon }) => (
   <Col xs={12} lg={6}>
-    <Link to={to}>
-      <Card hoverable>
+    <Link to={to} style={{ display: "block", height: "100%" }}>
+      <Card hoverable style={{ height: "100%" }}>
         <Statistic title={title} value={value} prefix={icon} />
       </Card>
     </Link>

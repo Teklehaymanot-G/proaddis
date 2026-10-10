@@ -106,16 +106,18 @@ const WhyUs = () => {
               const Icon = getIcon(feature.icon);
               return (
                 <Reveal key={`${feature.title}-${index}`} delay={(index % 2) * 100}>
-                  <div className="group h-full rounded-3xl border border-white/10 bg-white/[0.03] p-7 transition-colors duration-300 hover:border-brand-300/40 hover:bg-white/[0.06]">
-                    <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-600/20 text-brand-300 ring-1 ring-inset ring-brand-300/20 transition-colors duration-300 group-hover:bg-brand-600 group-hover:text-white">
+                  <div className="group flex h-full gap-4 rounded-3xl border border-white/10 bg-white/[0.03] p-5 transition-colors duration-300 hover:border-brand-300/40 hover:bg-white/[0.06] sm:block sm:p-7">
+                    <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-2xl bg-brand-600/20 text-brand-300 ring-1 ring-inset ring-brand-300/20 transition-colors duration-300 group-hover:bg-brand-600 group-hover:text-white sm:mb-6">
                       <Icon size={22} strokeWidth={1.75} />
                     </div>
-                    <h3 className="font-display text-lg font-semibold text-white">
-                      {feature.title}
-                    </h3>
-                    <p className="mt-2 text-sm leading-relaxed text-brand-100/60">
-                      {feature.description}
-                    </p>
+                    <div className="min-w-0">
+                      <h3 className="font-display text-lg font-semibold text-white">
+                        {feature.title}
+                      </h3>
+                      <p className="mt-1 text-sm leading-relaxed text-brand-100/60 sm:mt-2">
+                        {feature.description}
+                      </p>
+                    </div>
                   </div>
                 </Reveal>
               );
@@ -129,7 +131,7 @@ const WhyUs = () => {
             {stats.map((stat, index) => (
               <div
                 key={`${stat.label}-${index}`}
-                className="flex flex-col-reverse gap-2 bg-brand-950 p-7 md:p-9"
+                className="flex flex-col-reverse gap-2 bg-brand-950 p-5 sm:p-7 md:p-9"
               >
                 <dt className="text-sm text-brand-100/60">{stat.label}</dt>
                 <dd className="font-display text-4xl font-bold tracking-tight text-white md:text-5xl">

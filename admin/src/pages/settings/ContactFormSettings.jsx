@@ -1,11 +1,17 @@
 // src/pages/settings/ContactFormSettings.jsx
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { App, Button, Card, Checkbox, Form, Input, Select, Space, Switch, Table } from "antd";
+import { App, Button, Checkbox, Form, Input, Select, Table } from "antd";
 import { SaveOutlined } from "@ant-design/icons";
 import { api } from "../../api/client";
 import PageHeader from "../../components/PageHeader";
 import PageState from "../../components/PageState";
+import {
+  FormActions,
+  FormPanel,
+  FormSection,
+  SwitchField,
+} from "../../components/FormLayout";
 import useSettings from "./useSettings";
 
 const OPTIONAL_FIELDS = [
@@ -47,8 +53,9 @@ const ContactFormSettings = () => {
   const fieldColumns = [
     { title: "Field", dataIndex: "label" },
     {
-      title: "Show on the form",
-      width: 170,
+      title: "Shown",
+      width: 110,
+      align: "center",
       render: (_, row) =>
         row.fixed ? (
           <Checkbox checked disabled aria-label={`${row.label} is always shown`} />
@@ -60,7 +67,8 @@ const ContactFormSettings = () => {
     },
     {
       title: "Required",
-      width: 120,
+      width: 110,
+      align: "center",
       render: (_, row) =>
         row.fixed ? (
           <Checkbox checked disabled aria-label={`${row.label} is always required`} />
@@ -97,115 +105,128 @@ const ContactFormSettings = () => {
           onFinish={save}
           onValuesChange={() => setDirty(true)}
         >
-          <Space direction="vertical" size={24} style={{ width: "100%" }}>
-            <Card title="Form">
-              <div style={{ maxWidth: 720 }}>
-                <Form.Item
-                  name="enabled"
-                  label="Accept messages"
-                  valuePropName="checked"
-                  extra="When off, the website shows that the form is unavailable and nothing can be sent."
-                >
-                  <Switch />
-                </Form.Item>
-                <Form.Item
-                  name="successMessage"
-                  label="Confirmation shown after sending"
-                  rules={[{ required: true, message: "Enter a confirmation message" }]}
-                >
-                  <Input.TextArea autoSize={{ minRows: 2 }} maxLength={500} showCount />
-                </Form.Item>
-              </div>
-            </Card>
+          <FormPanel>
+            <FormSection
+              title="Availability"
+              description="Whether visitors can send messages, and what they see after sending one."
+            >
+              <Form.Item name="enabled" valuePropName="checked" noStyle>
+                <SwitchField
+                  title="Accept messages"
+                  description="When off, the website shows that the form is unavailable and nothing can be sent."
+                />
+              </Form.Item>
+              <Form.Item
+                name="successMessage"
+                label="Confirmation shown after sending"
+                rules={[{ required: true, message: "Enter a confirmation message" }]}
+              >
+                <Input.TextArea autoSize={{ minRows: 2 }} maxLength={500} showCount />
+              </Form.Item>
+            </FormSection>
 
-            <Card title="Fields" styles={{ body: { padding: 0 } }}>
+            <FormSection
+              title="Fields"
+              description="Name, email and message are always asked. Choose which extra fields to show and whether they must be filled in."
+            >
               <Table
                 rowKey="key"
                 columns={fieldColumns}
                 dataSource={fieldRows}
                 pagination={false}
                 size="middle"
+                bordered
               />
-            </Card>
+            </FormSection>
 
-            <Card title="Notifications">
-              <div style={{ maxWidth: 720 }}>
-                <Form.Item
-                  name="recipients"
-                  label="Send new messages to"
-                  extra={
-                    <>
-                      Type an email address and press Enter. You can add several.
-                      {settings?.envRecipient &&
-                        ` If empty, ${settings.envRecipient} (from the server's .env file) is used.`}{" "}
-                      Sending needs <Link to="/settings/email">Email (SMTP)</Link> to be set up.
-                    </>
-                  }
-                  rules={[
-                    {
-                      validator: (_, value = []) =>
-                        value.every((email) => EMAIL_PATTERN.test(email))
-                          ? Promise.resolve()
-                          : Promise.reject(new Error("One of these is not a valid email address")),
-                    },
-                  ]}
-                >
-                  <Select
-                    mode="tags"
-                    open={false}
-                    suffixIcon={null}
-                    tokenSeparators={[",", " ", ";"]}
-                    placeholder="name@example.com"
-                  />
-                </Form.Item>
-                <Form.Item
-                  name="subjectPrefix"
-                  label="Email subject"
-                  extra="If the visitor fills in a subject it is added after this."
-                >
-                  <Input maxLength={150} />
-                </Form.Item>
-              </div>
-            </Card>
-
-            <Card title="Automatic reply to the visitor">
-              <div style={{ maxWidth: 720 }}>
-                <Form.Item
-                  name={["autoReply", "enabled"]}
-                  label="Send an automatic reply"
-                  valuePropName="checked"
-                  extra="Emails the visitor straight away to confirm their message arrived."
-                >
-                  <Switch />
-                </Form.Item>
-                <Form.Item
-                  name={["autoReply", "subject"]}
-                  label="Subject"
-                  rules={[{ required: autoReplyOn, message: "Enter a subject" }]}
-                >
-                  <Input maxLength={150} disabled={!autoReplyOn} />
-                </Form.Item>
-                <Form.Item
-                  name={["autoReply", "body"]}
-                  label="Message"
-                  extra="{{name}} is replaced with the visitor's name."
-                  rules={[{ required: autoReplyOn, message: "Enter the reply message" }]}
-                >
-                  <Input.TextArea autoSize={{ minRows: 5 }} maxLength={5000} disabled={!autoReplyOn} />
-                </Form.Item>
-              </div>
-            </Card>
-
-            <Button
-              type="primary"
-              htmlType="submit"
-              icon={<SaveOutlined />}
-              loading={saving}
-              disabled={!dirty}
+            <FormSection
+              title="Notifications"
+              description={
+                <>
+                  Who is emailed when a new message arrives. Sending needs{" "}
+                  <Link to="/settings/email">Email (SMTP)</Link> to be set up.
+                </>
+              }
             >
-              Save contact form settings
-            </Button>
-          </Space>
+              <Form.Item
+                name="recipients"
+                label="Send new messages to"
+                extra={
+                  <>
+                    Type an email address and press Enter. You can add several.
+                    {settings?.envRecipient &&
+                      ` If empty, ${settings.envRecipient} (from the server's .env file) is used.`}
+                  </>
+                }
+                rules={[
+                  {
+                    validator: (_, value = []) =>
+                      value.every((email) => EMAIL_PATTERN.test(email))
+                        ? Promise.resolve()
+                        : Promise.reject(new Error("One of these is not a valid email address")),
+                  },
+                ]}
+              >
+                <Select
+                  mode="tags"
+                  open={false}
+                  suffixIcon={null}
+                  tokenSeparators={[",", " ", ";"]}
+                  placeholder="name@example.com"
+                />
+              </Form.Item>
+              <Form.Item
+                name="subjectPrefix"
+                label="Email subject"
+                extra="If the visitor fills in a subject it is added after this."
+              >
+                <Input maxLength={150} />
+              </Form.Item>
+            </FormSection>
+
+            <FormSection
+              title="Automatic reply"
+              description="An email sent to the visitor straight away to confirm their message arrived."
+            >
+              <Form.Item name={["autoReply", "enabled"]} valuePropName="checked" noStyle>
+                <SwitchField
+                  title="Send an automatic reply"
+                  description="Uses the subject and message below."
+                />
+              </Form.Item>
+              <Form.Item
+                name={["autoReply", "subject"]}
+                label="Subject"
+                rules={[{ required: autoReplyOn, message: "Enter a subject" }]}
+              >
+                <Input maxLength={150} disabled={!autoReplyOn} />
+              </Form.Item>
+              <Form.Item
+                name={["autoReply", "body"]}
+                label="Message"
+                extra="{{name}} is replaced with the visitor's name."
+                rules={[{ required: autoReplyOn, message: "Enter the reply message" }]}
+              >
+                <Input.TextArea
+                  autoSize={{ minRows: 5 }}
+                  maxLength={5000}
+                  disabled={!autoReplyOn}
+                />
+              </Form.Item>
+            </FormSection>
+
+            <FormActions hint={dirty ? "You have unsaved changes" : "All changes saved"}>
+              <Button
+                type="primary"
+                htmlType="submit"
+                icon={<SaveOutlined />}
+                loading={saving}
+                disabled={!dirty}
+              >
+                Save contact form settings
+              </Button>
+            </FormActions>
+          </FormPanel>
         </Form>
       </PageState>
     </>

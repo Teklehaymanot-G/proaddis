@@ -196,7 +196,7 @@ const AdminLayout = () => {
                 onClick={() => setDrawerOpen(true)}
               />
             )}
-            <Breadcrumb items={breadcrumb} />
+            <Breadcrumb items={isDesktop ? breadcrumb : breadcrumb.slice(-1)} />
           </Space>
 
           <Space size={4}>

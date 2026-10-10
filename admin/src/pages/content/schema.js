@@ -306,6 +306,7 @@ export const sections = [
 export const siteDetails = {
   key: "settings",
   label: "Site details",
+  textTab: "Details",
   description:
     "Contact details, social links and search-engine text used across the website.",
   fields: [

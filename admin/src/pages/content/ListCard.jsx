@@ -21,6 +21,7 @@ import {
   PlusOutlined,
   SearchOutlined,
 } from "@ant-design/icons";
+import DataTable from "../../components/DataTable";
 import { FormFields, IconPreview, MediaThumb } from "./fields";
 
 const SEARCH_FROM = 8; // show the search box once a list is this long
@@ -97,12 +98,13 @@ const ListCard = ({ field, section, canEdit, saving, onChange }) => {
   };
 
   const columns = [
-    { title: "#", width: 56, render: (_, row) => row.__index + 1 },
+    { title: "#", width: 56, mobile: "hidden", render: (_, row) => row.__index + 1 },
     ...field.columns.map((name) => {
       const column = field.fields.find((f) => f.name === name);
       const compact = ["icon", "image", "video", "number"].includes(column.type);
       return {
         title: column.label,
+        mobile: ["icon", "image", "video"].includes(column.type) ? "media" : undefined,
         dataIndex: name,
         width: compact ? 90 : undefined,
         ellipsis: !compact,
@@ -162,6 +164,7 @@ const ListCard = ({ field, section, canEdit, saving, onChange }) => {
 
   return (
     <Card
+      className="list-card"
       title={
         <Space>
           {field.label}
@@ -191,7 +194,7 @@ const ListCard = ({ field, section, canEdit, saving, onChange }) => {
       }
       styles={{ body: { padding: 0 } }}
     >
-      <Table
+      <DataTable
         rowKey="__index"
         columns={columns}
         dataSource={rows}
@@ -216,13 +219,13 @@ const ListCard = ({ field, section, canEdit, saving, onChange }) => {
         onClose={() => setEditing(null)}
         width={520}
         destroyOnClose
-        extra={
-          <Space>
+        footer={
+          <>
             <Button onClick={() => setEditing(null)}>Cancel</Button>
             <Button type="primary" loading={saving} onClick={submit}>
-              {editing?.index === null ? `Add ${field.singular}` : "Save"}
+              {editing?.index === null ? `Add ${field.singular}` : "Save changes"}
             </Button>
-          </Space>
+          </>
         }
       >
         <Form form={form} layout="vertical" requiredMark="optional" onFinish={submit}>

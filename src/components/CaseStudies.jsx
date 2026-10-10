@@ -40,7 +40,7 @@ const CaseStudies = () => {
                 </div>
 
                 {/* Content */}
-                <div className="flex flex-col p-8 md:p-12">
+                <div className="flex flex-col p-6 sm:p-8 md:p-12">
                   <span className="chip self-start uppercase tracking-wider">
                     {study.industry}
                   </span>
@@ -70,16 +70,16 @@ const CaseStudies = () => {
                   </div>
 
                   {/* Metrics */}
-                  <dl className="mt-8 grid grid-cols-3 gap-4 border-y border-slate-200 py-6">
+                  <dl className="mt-8 grid grid-cols-3 gap-3 border-y border-slate-200 py-6 sm:gap-4">
                     {(study.metrics || []).map((metric, metricIndex) => (
                       <div
                         key={`${metric.label}-${metricIndex}`}
-                        className="flex flex-col-reverse gap-1"
+                        className="flex min-w-0 flex-col-reverse gap-1"
                       >
                         <dt className="text-xs text-slate-500">
                           {metric.label}
                         </dt>
-                        <dd className="font-display text-2xl font-bold tracking-tight text-brand-600 md:text-4xl">
+                        <dd className="whitespace-nowrap font-display text-lg font-bold min-[360px]:text-xl tracking-tight text-brand-600 sm:text-2xl md:text-3xl xl:text-4xl">
                           {metric.value}
                         </dd>
                       </div>

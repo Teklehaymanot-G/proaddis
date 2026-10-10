@@ -1,11 +1,14 @@
 // src/pages/content/fields.jsx
 // Ant Design form controls for each field type in schema.js
 import { useState } from "react";
-import { App, Button, Form, Input, InputNumber, Select, Space, Upload } from "antd";
+import { App, Button, Form, Input, InputNumber, Modal, Select, Space, Upload } from "antd";
 import {
   DeleteOutlined,
+  ExportOutlined,
+  EyeOutlined,
   MinusCircleOutlined,
   PictureOutlined,
+  PlayCircleOutlined,
   PlusOutlined,
   UploadOutlined,
 } from "@ant-design/icons";
@@ -49,38 +52,97 @@ const IconSelect = ({ value, onChange, disabled }) => (
 
 // ---- Image / video ----
 
+const fileNameOf = (value) => decodeURIComponent(value.split(/[?#]/)[0].split("/").pop());
+
+// Large view of an image, or a player for a video
+export const MediaPreviewModal = ({ value, kind = "image", open, onClose }) => (
+  <Modal
+    open={open}
+    onCancel={onClose}
+    title={value ? fileNameOf(value) : "Preview"}
+    width={kind === "video" ? 960 : 880}
+    centered
+    destroyOnClose // stops a playing video when the dialog closes
+    footer={
+      <Button icon={<ExportOutlined />} href={assetUrl(value)} target="_blank" rel="noopener noreferrer">
+        Open in a new tab
+      </Button>
+    }
+  >
+    <div className="media-preview">
+      {kind === "video" ? (
+        <video src={assetUrl(value)} controls autoPlay playsInline />
+      ) : (
+        <img src={assetUrl(value)} alt={value ? fileNameOf(value) : ""} />
+      )}
+    </div>
+  </Modal>
+);
+
+// Small thumbnail; click it to open the preview
 export const MediaThumb = ({ value, kind = "image", size = 48 }) => {
+  // The file that failed to load, so a new value gets a fresh try
+  const [failed, setFailed] = useState(null);
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const missing = !value || failed === value;
+
   const box = {
     width: size * (kind === "video" ? 1.6 : 1),
     height: size,
-    borderRadius: 6,
-    border: "1px solid #f0f0f0",
-    background: "#fafafa",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    overflow: "hidden",
-    color: "#bfbfbf",
-    flexShrink: 0,
   };
   const fit = { width: "100%", height: "100%", objectFit: "contain" };
 
-  return (
-    <div style={box}>
-      {!value ? (
+  if (missing) {
+    return (
+      <div className="media-thumb" style={box}>
         <PictureOutlined />
-      ) : kind === "video" ? (
-        <video key={value} src={assetUrl(value)} muted playsInline preload="metadata" style={{ ...fit, objectFit: "cover" }} />
-      ) : (
-        <img src={assetUrl(value)} alt="" style={fit} />
-      )}
-    </div>
+      </div>
+    );
+  }
+
+  return (
+    <>
+      <button
+        type="button"
+        className="media-thumb media-thumb--clickable"
+        style={box}
+        aria-label={`Preview ${kind}: ${fileNameOf(value)}`}
+        onClick={(event) => {
+          event.stopPropagation(); // not a click on the table row
+          setPreviewOpen(true);
+        }}
+      >
+        {kind === "video" ? (
+          <video
+            key={value}
+            src={assetUrl(value)}
+            muted
+            playsInline
+            preload="metadata"
+            onError={() => setFailed(value)}
+            style={{ ...fit, objectFit: "cover" }}
+          />
+        ) : (
+          <img src={assetUrl(value)} alt="" onError={() => setFailed(value)} style={fit} />
+        )}
+        <span className="media-thumb__overlay">
+          {kind === "video" ? <PlayCircleOutlined /> : <EyeOutlined />}
+        </span>
+      </button>
+      <MediaPreviewModal
+        value={value}
+        kind={kind}
+        open={previewOpen}
+        onClose={() => setPreviewOpen(false)}
+      />
+    </>
   );
 };
 
 const MediaInput = ({ value, onChange, disabled, kind }) => {
   const { message } = App.useApp();
   const [uploading, setUploading] = useState(false);
+  const [previewOpen, setPreviewOpen] = useState(false);
   const isVideo = kind === "video";
 
   const handleUpload = async (file) => {
@@ -98,16 +160,16 @@ const MediaInput = ({ value, onChange, disabled, kind }) => {
   };
 
   return (
-    <Space align="start" size={12} style={{ width: "100%" }}>
+    <div className="media-input">
       <MediaThumb value={value} kind={kind} size={72} />
-      <Space direction="vertical" size={8} style={{ width: "100%", minWidth: 220 }}>
+      <Space direction="vertical" size={8} className="media-input__controls">
         <Input
           value={value}
           disabled={disabled}
           placeholder="Upload a file or paste a link"
           onChange={(e) => onChange(e.target.value)}
         />
-        <Space>
+        <Space wrap>
           <Upload
             accept={
               isVideo
@@ -122,6 +184,16 @@ const MediaInput = ({ value, onChange, disabled, kind }) => {
               Upload {isVideo ? "video" : "image"}
             </Button>
           </Upload>
+          {value && (
+            <Button
+              icon={isVideo ? <PlayCircleOutlined /> : <EyeOutlined />}
+              // Stays usable in a read-only form: looking is always allowed
+              disabled={false}
+              onClick={() => setPreviewOpen(true)}
+            >
+              Preview
+            </Button>
+          )}
           {value && !disabled && (
             <Button type="text" danger icon={<DeleteOutlined />} onClick={() => onChange("")}>
               Remove
@@ -129,7 +201,15 @@ const MediaInput = ({ value, onChange, disabled, kind }) => {
           )}
         </Space>
       </Space>
-    </Space>
+      {value && (
+        <MediaPreviewModal
+          value={value}
+          kind={kind}
+          open={previewOpen}
+          onClose={() => setPreviewOpen(false)}
+        />
+      )}
+    </div>
   );
 };
 
@@ -147,7 +227,7 @@ const InlineList = ({ field, path, disabled }) => (
                   placeholder={sub.placeholder || sub.label}
                   aria-label={sub.label}
                   disabled={disabled}
-                  style={{ width: 180 }}
+                  style={{ width: 180, maxWidth: "100%" }}
                 />
               </Form.Item>
             ))}

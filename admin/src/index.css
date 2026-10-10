@@ -11,3 +11,451 @@ body {
   margin: 0;
   background: #e9eef5;
 }
+
+/* ---- Cards: soft shadow instead of a hard outline ---- */
+
+.ant-card {
+  border-color: #e3e8ef;
+  box-shadow:
+    0 1px 2px rgba(4, 24, 42, 0.04),
+    0 6px 20px -10px rgba(4, 24, 42, 0.12);
+}
+
+/* ---- Form controls ---- */
+
+.ant-form-item .ant-form-item-label > label {
+  font-weight: 500;
+}
+
+/* "(optional)" marker */
+.ant-form-item .ant-form-item-label > label .ant-form-item-optional {
+  font-weight: 400;
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+.ant-form-item .ant-form-item-extra {
+  margin-top: 6px;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: #6b7a90;
+}
+
+.ant-form-item .ant-form-item-explain-error {
+  margin-top: 6px;
+  font-size: 12.5px;
+}
+
+/* Inputs get a faint tint so they read as fields on a white panel */
+.ant-input-outlined:not(.ant-input-disabled):not(:focus):not(:focus-within),
+.ant-input-number-outlined:not(.ant-input-number-disabled):not(:focus-within),
+.ant-select-outlined:not(.ant-select-disabled):not(.ant-select-focused) .ant-select-selector {
+  background: #f8fafc;
+}
+
+.ant-input-outlined:hover,
+.ant-input-number-outlined:hover,
+.ant-select-outlined:hover .ant-select-selector {
+  background: #ffffff;
+}
+
+/* ---- Settings-style form panel (components/FormLayout.jsx) ---- */
+
+.form-panel {
+  background: #ffffff;
+  border: 1px solid #e3e8ef;
+  border-radius: 16px;
+  box-shadow:
+    0 1px 2px rgba(4, 24, 42, 0.04),
+    0 6px 20px -10px rgba(4, 24, 42, 0.12);
+}
+
+.form-section {
+  display: grid;
+  grid-template-columns: minmax(200px, 280px) minmax(0, 1fr);
+  gap: 16px 48px;
+  padding: 28px 32px;
+}
+
+.form-section + .form-section {
+  border-top: 1px solid #eef1f5;
+}
+
+.form-section__body {
+  max-width: 600px;
+}
+
+.form-section__body--wide {
+  max-width: none;
+}
+
+/* The last field of a section should not add extra space under it */
+.form-section__body > .ant-form-item:last-child,
+.form-section__body > .ant-row:last-child .ant-form-item {
+  margin-bottom: 0;
+}
+
+.form-actions {
+  position: sticky;
+  bottom: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 32px;
+  background: rgba(248, 250, 252, 0.92);
+  backdrop-filter: blur(6px);
+  border-top: 1px solid #e3e8ef;
+  border-radius: 0 0 16px 16px;
+}
+
+.form-actions__hint {
+  font-size: 13px;
+  color: #6b7a90;
+}
+
+.form-actions__buttons {
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
+}
+
+@media (max-width: 900px) {
+  .form-section {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 20px 16px;
+  }
+
+  .form-actions {
+    padding: 12px 16px;
+  }
+
+  .form-actions__hint {
+    display: none;
+  }
+}
+
+/* ---- Switch row ---- */
+
+.switch-field {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 16px;
+  margin-bottom: 22px;
+  background: #f8fafc;
+  border: 1px solid #e3e8ef;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.switch-field:hover {
+  border-color: #b8cfe0;
+}
+
+.switch-field--disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.switch-field:last-child {
+  margin-bottom: 0;
+}
+
+.switch-field__text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.switch-field__title {
+  font-weight: 500;
+  color: #1e293b;
+}
+
+.switch-field__description {
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: #6b7a90;
+}
+
+/* ---- Tabs on content pages ---- */
+
+.page-tabs > .ant-tabs-nav {
+  margin-bottom: 20px;
+}
+
+.page-tabs > .ant-tabs-nav .ant-tabs-tab {
+  padding: 10px 4px;
+  font-weight: 500;
+}
+
+/* Number of entries next to a tab name */
+.tab-count {
+  display: inline-block;
+  min-width: 22px;
+  margin-inline-start: 8px;
+  padding: 0 7px;
+  font-size: 12px;
+  line-height: 20px;
+  text-align: center;
+  color: #475569;
+  background: #dbe3ed;
+  border-radius: 999px;
+}
+
+.ant-tabs-tab-active .tab-count {
+  color: #ffffff;
+  background: #006aab;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
+/* ---- Image / video thumbnails and their preview dialog ---- */
+
+.media-thumb {
+  position: relative;
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  overflow: hidden;
+  font-size: 16px;
+  color: #b3bdcb;
+  background: #f4f6f9;
+  border: 1px solid #e3e8ef;
+  border-radius: 8px;
+}
+
+.media-thumb--clickable {
+  cursor: zoom-in;
+  transition: border-color 0.2s;
+}
+
+.media-thumb--clickable:hover,
+.media-thumb--clickable:focus-visible {
+  border-color: #006aab;
+}
+
+.media-thumb__overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  background: rgba(4, 24, 42, 0.5);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.media-thumb--clickable:hover .media-thumb__overlay,
+.media-thumb--clickable:focus-visible .media-thumb__overlay {
+  opacity: 1;
+}
+
+.media-preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  /* Checkerboard so transparent logos are visible */
+  background:
+    repeating-conic-gradient(#eef1f5 0% 25%, #ffffff 0% 50%) 0 0 / 20px 20px;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.media-preview img,
+.media-preview video {
+  display: block;
+  max-width: 100%;
+  max-height: 70vh;
+}
+
+.media-preview video {
+  width: 100%;
+  background: #000000;
+}
+
+/* ---- Image / video field ---- */
+
+.media-input {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.media-input__controls {
+  flex: 1 1 200px;
+  min-width: 0;
+}
+
+/* ---- Tables shown as cards on phones (components/DataTable.jsx) ---- */
+
+.data-cards {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.data-card {
+  padding: 14px 16px;
+  border-top: 1px solid #eef1f5;
+}
+
+.data-card:first-child {
+  border-top: 0;
+}
+
+.data-card--clickable {
+  cursor: pointer;
+}
+
+.data-card--clickable:active {
+  background: #f6f8fb;
+}
+
+.data-card__head {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.data-card__media {
+  flex-shrink: 0;
+}
+
+.data-card__title {
+  min-width: 0;
+  font-weight: 500;
+  color: #1e293b;
+  overflow-wrap: anywhere;
+}
+
+.data-card__details {
+  display: grid;
+  gap: 6px;
+  margin: 10px 0 0;
+}
+
+.data-card__detail {
+  display: grid;
+  grid-template-columns: 96px minmax(0, 1fr);
+  gap: 12px;
+  font-size: 13px;
+}
+
+.data-card__detail dt {
+  color: #6b7a90;
+}
+
+.data-card__detail dd {
+  margin: 0;
+  min-width: 0;
+  color: #334155;
+  overflow-wrap: anywhere;
+  /* Long text (a message, a description) is cut after three lines */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+}
+
+.data-card__actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 8px;
+}
+
+.data-card__actions .ant-space {
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  row-gap: 8px;
+}
+
+.data-cards__pagination {
+  display: flex;
+  justify-content: center;
+  padding: 12px 16px;
+  border-top: 1px solid #eef1f5;
+}
+
+/* ---- Phones ---- */
+
+@media (max-width: 767px) {
+  /* Card header: title on one line, search and Add button below it */
+  .list-card .ant-card-head {
+    padding-block: 12px;
+  }
+
+  .list-card .ant-card-head-wrapper {
+    flex-wrap: wrap;
+    row-gap: 10px;
+  }
+
+  .list-card .ant-card-extra {
+    width: 100%;
+    margin-inline-start: 0;
+    padding: 0;
+  }
+
+  .list-card .ant-card-extra > .ant-space {
+    display: flex;
+    width: 100%;
+  }
+
+  .list-card .ant-card-extra > .ant-space > .ant-space-item:first-child {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .list-card .ant-card-extra .ant-input-affix-wrapper {
+    width: 100% !important;
+  }
+
+  /* Page title actions sit under the title, full width where it helps */
+  .ant-tabs-nav .ant-tabs-tab {
+    padding-inline: 2px;
+  }
+
+  /* Drawers use the whole screen */
+  .ant-drawer-content-wrapper {
+    max-width: 100vw;
+  }
+
+  .ant-drawer .ant-drawer-body {
+    padding: 16px;
+  }
+
+  .ant-drawer .ant-drawer-footer {
+    padding: 12px 16px;
+  }
+
+  .ant-modal .ant-modal-content {
+    padding: 20px 16px;
+  }
+}
+
+/* ---- Drawers and dialogs: actions in a footer bar ---- */
+
+.ant-drawer .ant-drawer-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 14px 24px;
+  background: #f8fafc;
+}

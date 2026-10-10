@@ -1,16 +1,21 @@
 // src/pages/content/SectionPage.jsx
 import { useCallback, useEffect, useState } from "react";
-import { Alert, App, Button, Card, Form, Space } from "antd";
+import { useSearchParams } from "react-router-dom";
+import { Alert, App, Badge, Button, Form, Tabs } from "antd";
 import { SaveOutlined } from "@ant-design/icons";
 import { api } from "../../api/client";
 import { useAuth } from "../../auth/AuthContext";
 import PageHeader from "../../components/PageHeader";
 import PageState from "../../components/PageState";
+import { FormActions, FormPanel, FormSection } from "../../components/FormLayout";
 import { FormFields } from "./fields";
 import ListCard from "./ListCard";
 
+const TEXT_TAB = "section";
+
 const SectionPage = ({ section }) => {
   const { message } = App.useApp();
+  const [searchParams, setSearchParams] = useSearchParams();
   const { can } = useAuth();
   const canEdit = can("content.edit");
 
@@ -63,73 +68,131 @@ const SectionPage = ({ section }) => {
     if (await persist({ ...value, ...values }, "Changes saved")) setDirty(false);
   };
 
+  const textPanel = textFields.length > 0 && (
+    <Form
+      form={form}
+      layout="vertical"
+      requiredMark="optional"
+      disabled={!canEdit}
+      onFinish={saveText}
+      onValuesChange={() => setDirty(true)}
+    >
+      <FormPanel>
+        <FormSection
+          title={listFields.length > 0 ? "Section text" : section.label}
+          description={
+            listFields.length > 0
+              ? "Headings and text shown with this section on the website."
+              : section.description
+          }
+        >
+          <FormFields fields={textFields} section={value || {}} disabled={!canEdit} />
+        </FormSection>
+        {canEdit && (
+          <FormActions hint={dirty ? "You have unsaved changes" : "All changes saved"}>
+            {dirty && (
+              <Button
+                onClick={() => {
+                  form.setFieldsValue(value);
+                  setDirty(false);
+                }}
+              >
+                Discard
+              </Button>
+            )}
+            <Button
+              type="primary"
+              htmlType="submit"
+              icon={<SaveOutlined />}
+              loading={saving}
+              disabled={!dirty}
+            >
+              Save changes
+            </Button>
+          </FormActions>
+        )}
+      </FormPanel>
+    </Form>
+  );
+
+  const listPanel = (field) => (
+    <ListCard
+      field={field}
+      section={value}
+      canEdit={canEdit}
+      saving={saving}
+      onChange={(items) =>
+        persist({ ...value, [field.name]: items }, `${field.label} updated`)
+      }
+    />
+  );
+
+  // One tab for the section's text and one per list (projects, categories, …)
+  const tabs = value
+    ? [
+        ...(textPanel
+          ? [
+              {
+                key: TEXT_TAB,
+                // Kept mounted so the form exists even when another tab opens first
+                forceRender: true,
+                label: (
+                  <span>
+                    {section.textTab || "Section"}
+                    {dirty && <Badge status="warning" style={{ marginInlineStart: 8 }} />}
+                    {dirty && <span className="sr-only"> (unsaved changes)</span>}
+                  </span>
+                ),
+                children: textPanel,
+              },
+            ]
+          : []),
+        ...listFields.map((field) => ({
+          key: field.name,
+          label: (
+            <span>
+              {field.label}
+              <span className="tab-count">{(value[field.name] || []).length}</span>
+            </span>
+          ),
+          children: listPanel(field),
+        })),
+      ]
+    : [];
+
+  const requestedTab = searchParams.get("tab");
+  const activeTab = tabs.some((tab) => tab.key === requestedTab)
+    ? requestedTab
+    : tabs[0]?.key;
+
   return (
     <>
       <PageHeader title={section.label} description={section.description} />
 
       <PageState loading={!value && !error} error={error} onRetry={load}>
         {value && (
-          <Space direction="vertical" size={24} style={{ width: "100%" }}>
+          <>
             {!canEdit && (
               <Alert
                 type="info"
                 showIcon
                 message="You can view this content but not change it."
+                style={{ marginBottom: 16 }}
               />
             )}
 
-            {textFields.length > 0 && (
-              <Card title={listFields.length > 0 ? "Section text" : undefined}>
-                <Form
-                  form={form}
-                  layout="vertical"
-                  requiredMark="optional"
-                  disabled={!canEdit}
-                  onFinish={saveText}
-                  onValuesChange={() => setDirty(true)}
-                  style={{ maxWidth: 720 }}
-                >
-                  <FormFields fields={textFields} section={value} disabled={!canEdit} />
-                  {canEdit && (
-                    <Space>
-                      <Button
-                        type="primary"
-                        htmlType="submit"
-                        icon={<SaveOutlined />}
-                        loading={saving}
-                        disabled={!dirty}
-                      >
-                        Save changes
-                      </Button>
-                      {dirty && (
-                        <Button
-                          onClick={() => {
-                            form.setFieldsValue(value);
-                            setDirty(false);
-                          }}
-                        >
-                          Discard
-                        </Button>
-                      )}
-                    </Space>
-                  )}
-                </Form>
-              </Card>
-            )}
-
-            {listFields.map((field) => (
-              <ListCard
-                key={field.name}
-                field={field}
-                section={value}
-                canEdit={canEdit}
-                saving={saving}
-                onChange={(items) =>
-                  persist({ ...value, [field.name]: items }, `${field.label} updated`)
-                }
+            {tabs.length > 1 ? (
+              <Tabs
+                className="page-tabs"
+                activeKey={activeTab}
+                // The open tab is kept in the address so refresh and links keep it
+                onChange={(key) => setSearchParams({ tab: key }, { replace: true })}
+                items={tabs}
               />
-            ))}
-          </Space>
+            ) : (
+              tabs[0]?.children
+            )}
+          </>
         )}
       </PageState>
     </>

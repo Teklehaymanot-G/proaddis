@@ -10,7 +10,6 @@ import {
   Popconfirm,
   Select,
   Space,
-  Switch,
   Table,
   Tag,
   Tooltip,
@@ -21,6 +20,8 @@ import { api } from "../api/client";
 import { useAuth } from "../auth/AuthContext";
 import PageHeader from "../components/PageHeader";
 import PageState from "../components/PageState";
+import DataTable from "../components/DataTable";
+import { SwitchField } from "../components/FormLayout";
 import { formatDateTime } from "../components/format";
 
 const Users = () => {
@@ -177,7 +178,7 @@ const Users = () => {
 
       <PageState loading={!users && !error} error={error} onRetry={load}>
         <Card styles={{ body: { padding: 0 } }}>
-          <Table
+          <DataTable
             rowKey="id"
             columns={columns}
             dataSource={users || []}
@@ -196,11 +197,17 @@ const Users = () => {
         open={Boolean(editing)}
         onCancel={() => setEditing(null)}
         onOk={() => form.submit()}
-        okText={isNew ? "Create user" : "Save"}
+        okText={isNew ? "Create user" : "Save changes"}
         confirmLoading={saving}
         destroyOnClose
       >
-        <Form form={form} layout="vertical" requiredMark="optional" onFinish={submit}>
+        <Form
+          form={form}
+          layout="vertical"
+          requiredMark="optional"
+          onFinish={submit}
+          style={{ marginTop: 20 }}
+        >
           <Form.Item
             name="name"
             label="Full name"
@@ -249,17 +256,16 @@ const Users = () => {
           >
             <Input.Password autoComplete="new-password" />
           </Form.Item>
-          <Form.Item
-            name="isActive"
-            label="Active"
-            valuePropName="checked"
-            extra={
-              isSelf
-                ? "You cannot deactivate yourself."
-                : "Deactivated users cannot sign in but are kept in the list."
-            }
-          >
-            <Switch disabled={isSelf} />
+          <Form.Item name="isActive" valuePropName="checked" noStyle>
+            <SwitchField
+              title="Active"
+              description={
+                isSelf
+                  ? "You cannot deactivate yourself."
+                  : "Deactivated users cannot sign in but are kept in the list."
+              }
+              disabled={isSelf}
+            />
           </Form.Item>
         </Form>
       </Modal>

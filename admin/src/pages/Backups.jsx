@@ -26,6 +26,7 @@ import { api } from "../api/client";
 import { useAuth } from "../auth/AuthContext";
 import PageHeader from "../components/PageHeader";
 import PageState from "../components/PageState";
+import DataTable from "../components/DataTable";
 import { formatDateTime, formatSize } from "../components/format";
 
 const KIND = [
@@ -185,7 +186,7 @@ const Backups = () => {
           />
 
           <Card styles={{ body: { padding: 0 } }}>
-            <Table
+            <DataTable
               rowKey="name"
               columns={columns}
               dataSource={backups || []}

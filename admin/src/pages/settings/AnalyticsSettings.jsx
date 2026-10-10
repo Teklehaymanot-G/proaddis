@@ -1,10 +1,16 @@
 // src/pages/settings/AnalyticsSettings.jsx
 import { useEffect, useState } from "react";
-import { Alert, App, Button, Card, Form, Input, Space, Steps, Switch, Typography } from "antd";
+import { Alert, App, Button, Card, Form, Input, Space, Steps, Typography } from "antd";
 import { SaveOutlined } from "@ant-design/icons";
 import { api } from "../../api/client";
 import PageHeader from "../../components/PageHeader";
 import PageState from "../../components/PageState";
+import {
+  FormActions,
+  FormPanel,
+  FormSection,
+  SwitchField,
+} from "../../components/FormLayout";
 import useSettings from "./useSettings";
 import AnalyticsReportsCard from "./AnalyticsReportsCard";
 
@@ -61,40 +67,49 @@ const AnalyticsSettings = () => {
             }
           />
 
-          <Card title="Tracking">
-            <Form
-              form={form}
-              layout="vertical"
-              requiredMark="optional"
-              onFinish={save}
-              onValuesChange={() => setDirty(true)}
-              style={{ maxWidth: 480 }}
-            >
-              <Form.Item
-                name="measurementId"
-                label="Measurement ID"
-                extra="Starts with G- (Google Analytics 4)."
-                rules={[
-                  { required: enabled, message: "Enter a Measurement ID to turn tracking on" },
-                  { pattern: ID_PATTERN, message: "A Measurement ID looks like G-XXXXXXXXXX" },
-                ]}
+          <Form
+            form={form}
+            layout="vertical"
+            requiredMark="optional"
+            onFinish={save}
+            onValuesChange={() => setDirty(true)}
+          >
+            <FormPanel>
+              <FormSection
+                title="Tracking"
+                description="Loads the Google tag on the website so visits are counted."
               >
-                <Input placeholder="G-XXXXXXXXXX" maxLength={30} />
-              </Form.Item>
-              <Form.Item name="enabled" label="Track visits" valuePropName="checked">
-                <Switch />
-              </Form.Item>
-              <Button
-                type="primary"
-                htmlType="submit"
-                icon={<SaveOutlined />}
-                loading={saving}
-                disabled={!dirty}
-              >
-                Save
-              </Button>
-            </Form>
-          </Card>
+                <Form.Item
+                  name="measurementId"
+                  label="Measurement ID"
+                  extra="Starts with G- (Google Analytics 4)."
+                  rules={[
+                    { required: enabled, message: "Enter a Measurement ID to turn tracking on" },
+                    { pattern: ID_PATTERN, message: "A Measurement ID looks like G-XXXXXXXXXX" },
+                  ]}
+                >
+                  <Input placeholder="G-XXXXXXXXXX" maxLength={30} />
+                </Form.Item>
+                <Form.Item name="enabled" valuePropName="checked" noStyle>
+                  <SwitchField
+                    title="Track visits"
+                    description="When on, the website reports visits to this Measurement ID."
+                  />
+                </Form.Item>
+              </FormSection>
+              <FormActions hint={dirty ? "You have unsaved changes" : "All changes saved"}>
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  icon={<SaveOutlined />}
+                  loading={saving}
+                  disabled={!dirty}
+                >
+                  Save tracking settings
+                </Button>
+              </FormActions>
+            </FormPanel>
+          </Form>
 
           {settings?.analyticsReports && (
             <AnalyticsReportsCard
