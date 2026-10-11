@@ -31,7 +31,7 @@ const defaults = {
   },
 
   hero: {
-    videoUrl: "/Comp 3.mp4",
+    videoUrl: "/proaddis marketing.mp4",
   },
 
   about: {

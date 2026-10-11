@@ -15,6 +15,7 @@ const DEFAULTS = {
   contactForm: {
     enabled: true,
     recipients: [],
+    copyTo: [], // gets a copy (CC) of every notification
     subjectPrefix: "New Contact Form Submission",
     successMessage:
       "Thank you! Your message has been sent successfully. We'll get back to you soon.",

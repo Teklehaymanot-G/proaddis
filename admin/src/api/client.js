@@ -1,11 +1,15 @@
 // src/api/client.js
 export const API_URL = (
-  import.meta.env.VITE_API_URL || "http://localhost:5000"
+  import.meta.env.VITE_API_URL ||
+  "https://proaddis.dealstoaddis.com" ||
+  "http://localhost:5000"
 ).replace(/\/$/, "");
 
 export const SITE_URL =
   import.meta.env.VITE_SITE_URL ||
-  (import.meta.env.DEV ? "http://localhost:5173" : "https://proaddismarketing.com");
+  (import.meta.env.DEV
+    ? "http://localhost:5173"
+    : "https://proaddismarketing.com");
 
 const TOKEN_KEY = "proaddis-admin-token";
 
@@ -51,7 +55,9 @@ const send = async (path, { method = "GET", body, formData } = {}) => {
       body: formData || (body !== undefined ? JSON.stringify(body) : undefined),
     });
   } catch {
-    throw new Error(`Cannot reach the server at ${API_URL}. Check that it is running.`);
+    throw new Error(
+      `Cannot reach the server at ${API_URL}. Check that it is running.`,
+    );
   }
 
   if (response.status === 401 && path !== "/api/auth/login") {
@@ -111,12 +117,14 @@ export const api = {
 
   // Website content
   getContent: () => request("/api/admin/content"),
-  saveSection: (section, content) => put(`/api/admin/content/${section}`, content),
+  saveSection: (section, content) =>
+    put(`/api/admin/content/${section}`, content),
   uploadMedia: (file) => upload("/api/admin/upload", file),
 
   // Messages
   getMessages: () => request("/api/admin/messages"),
-  setMessagesRead: (ids, read) => post("/api/admin/messages/read", { ids, read }),
+  setMessagesRead: (ids, read) =>
+    post("/api/admin/messages/read", { ids, read }),
   deleteMessages: (ids) => post("/api/admin/messages/delete", { ids }),
 
   // Users and roles
@@ -134,6 +142,9 @@ export const api = {
   saveSmtp: (smtp) => put("/api/admin/settings/smtp", smtp),
   testSmtp: (to) => post("/api/admin/settings/smtp/test", { to }),
   saveContactForm: (form) => put("/api/admin/settings/contact-form", form),
+  previewContactEmail: (request) =>
+    post("/api/admin/settings/contact-form/preview", request),
+  testContactEmail: () => post("/api/admin/settings/contact-form/test"),
   saveAnalytics: (analytics) => put("/api/admin/settings/analytics", analytics),
   saveAnalyticsReports: (connection) =>
     put("/api/admin/settings/analytics-reports", connection),
@@ -142,7 +153,9 @@ export const api = {
   // Analytics reports
   analyticsStatus: () => request("/api/admin/analytics/status"),
   analyticsReport: (days, fresh) =>
-    request(`/api/admin/analytics/report?days=${days}${fresh ? "&fresh=1" : ""}`),
+    request(
+      `/api/admin/analytics/report?days=${days}${fresh ? "&fresh=1" : ""}`,
+    ),
 
   // Backups
   getBackups: () => request("/api/admin/backups"),
@@ -151,6 +164,8 @@ export const api = {
   downloadBackup: (name) =>
     download(`/api/admin/backups/${encodeURIComponent(name)}/download`, name),
   restoreBackup: (name, includeAccess) =>
-    post(`/api/admin/backups/${encodeURIComponent(name)}/restore`, { includeAccess }),
+    post(`/api/admin/backups/${encodeURIComponent(name)}/restore`, {
+      includeAccess,
+    }),
   deleteBackup: (name) => del(`/api/admin/backups/${encodeURIComponent(name)}`),
 };

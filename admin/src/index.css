@@ -290,6 +290,25 @@ body {
   background: #000000;
 }
 
+/* ---- Email preview (settings) ---- */
+
+.email-preview {
+  display: flex;
+  justify-content: center;
+  background: #dfe5ee;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.email-preview iframe {
+  display: block;
+  max-width: 100%;
+  height: 62vh;
+  background: #eef2f6;
+  border: 0;
+  transition: width 0.25s;
+}
+
 /* ---- Image / video field ---- */
 
 .media-input {
@@ -458,4 +477,66 @@ body {
   gap: 8px;
   padding: 14px 24px;
   background: #f8fafc;
+}
+
+/* ---- Scrollbars: slim and rounded, matching the admin colours ---- */
+
+/* Firefox, and current Chrome / Edge */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #b9c5d4 transparent;
+}
+
+/* Chrome, Edge and Safari (WebKit) */
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: #b9c5d4;
+  /* The transparent border makes the thumb look slimmer than its hit area */
+  border: 2px solid transparent;
+  border-radius: 999px;
+  background-clip: padding-box;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: #006aab;
+}
+
+*::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* The page itself: a faint track so the bar has a visible lane */
+html {
+  scrollbar-color: #a9b7c8 #e9eef5;
+}
+
+html::-webkit-scrollbar-track {
+  background: #e9eef5;
+}
+
+/* Dark sidebar (and its phone drawer): light thumb on navy */
+.ant-layout-sider,
+.ant-layout-sider *,
+.ant-drawer-body:has(.ant-menu-dark) {
+  scrollbar-color: rgba(255, 255, 255, 0.22) transparent;
+}
+
+.ant-layout-sider::-webkit-scrollbar-thumb,
+.ant-layout-sider *::-webkit-scrollbar-thumb,
+.ant-drawer-body:has(.ant-menu-dark)::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.22);
+}
+
+.ant-layout-sider::-webkit-scrollbar-thumb:hover,
+.ant-layout-sider *::-webkit-scrollbar-thumb:hover,
+.ant-drawer-body:has(.ant-menu-dark)::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(255, 255, 255, 0.45);
 }

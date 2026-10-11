@@ -2,14 +2,8 @@
   "settings": {
     "seoTitle": "ProAddis Marketing - Strategic Marketing Solutions in Ethiopia",
     "seoDescription": "ProAddis Marketing provides data-driven marketing solutions, branding, digital advertising, and traditional marketing services in Ethiopia. Your path to business success.",
-    "phones": [
-      "+251 (988) 11-88-88",
-      "+251 (912) 17-38-76"
-    ],
-    "emails": [
-      "proaddismarketing@gmail.com",
-      "contact@proaddismarketing.com"
-    ],
+    "phones": ["+251 (988) 11-88-88", "+251 (912) 17-38-76"],
+    "emails": ["proaddismarketing@gmail.com", "contact@proaddismarketing.com"],
     "addressLines": [
       "Mexico to Kera road, next to Total station",
       "Metamen Building 2nd Floor",
@@ -45,7 +39,7 @@
     ]
   },
   "hero": {
-    "videoUrl": "/Comp 3.mp4"
+    "videoUrl": "/proaddis marketing.mp4"
   },
   "about": {
     "eyebrow": "Why We Stand Out",
@@ -110,13 +104,7 @@
     "eyebrow": "Marketing Solutions",
     "title": "Our Services",
     "description": "Powered by Data and Creative Excellence",
-    "tags": [
-      "Creative",
-      "Innovative",
-      "Data-Driven",
-      "Strategic",
-      "Impactful"
-    ],
+    "tags": ["Creative", "Innovative", "Data-Driven", "Strategic", "Impactful"],
     "items": [
       {
         "icon": "Target",
@@ -334,12 +322,7 @@
         "category": "social",
         "image": "projects/abay tiktok.png",
         "description": "Social media marketing campaign for Abay Paints",
-        "technologies": [
-          "FaceBook",
-          "TikTok",
-          "Instagram",
-          "Telegram"
-        ],
+        "technologies": ["FaceBook", "TikTok", "Instagram", "Telegram"],
         "liveUrl": "https://www.tiktok.com/@abayesdeepaints"
       },
       {
@@ -347,12 +330,7 @@
         "category": "social",
         "image": "projects/warka tiktok.png",
         "description": "Social media marketing campaign for Warka Academy",
-        "technologies": [
-          "FaceBook",
-          "TikTok",
-          "Instagram",
-          "Telegram"
-        ],
+        "technologies": ["FaceBook", "TikTok", "Instagram", "Telegram"],
         "liveUrl": "https://www.tiktok.com/@warkaacademy"
       },
       {
@@ -360,11 +338,7 @@
         "category": "social",
         "image": "projects/yonathan.png",
         "description": "Social media management for Yonatan BT Furniture",
-        "technologies": [
-          "Instagram",
-          "Facebook",
-          "Content Creation"
-        ],
+        "technologies": ["Instagram", "Facebook", "Content Creation"],
         "liveUrl": "https://www.tiktok.com/@yonatanbtfurniture"
       },
       {
@@ -372,9 +346,7 @@
         "category": "web",
         "image": "https://images.unsplash.com/photo-1565688534245-05d6b5be184a?w=500",
         "description": "Website development for Valtra Logistics",
-        "technologies": [
-          "WordPress"
-        ],
+        "technologies": ["WordPress"],
         "liveUrl": "https://www.valtralogistics.com"
       },
       {
@@ -382,11 +354,7 @@
         "category": "design",
         "image": "logos/valtra.jpg",
         "description": "Logo design for Valtra Logistics",
-        "technologies": [
-          "Logo",
-          "Brand Color",
-          "Letterhead Design"
-        ],
+        "technologies": ["Logo", "Brand Color", "Letterhead Design"],
         "liveUrl": "https://www.valtralogistics.com"
       },
       {
@@ -394,10 +362,7 @@
         "category": "mobile",
         "image": "projects/sika sinage.jpg",
         "description": "Signage design for Sika Chemical Engineering",
-        "technologies": [
-          "Signage",
-          "Lightbox"
-        ],
+        "technologies": ["Signage", "Lightbox"],
         "liveUrl": "https://eth.sika.com/"
       },
       {
@@ -405,9 +370,7 @@
         "category": "mobile",
         "image": "projects/sika.png",
         "description": "Production design for Sika Chemical Engineering",
-        "technologies": [
-          "Production"
-        ],
+        "technologies": ["Production"],
         "liveUrl": "https://eth.sika.com/"
       },
       {
@@ -415,11 +378,7 @@
         "category": "marketing",
         "image": "projects/tap & go.jpg",
         "description": "Tap & Go Campaign for Little, Visa & Bank of Abyssinia",
-        "technologies": [
-          "Outdoor Screen",
-          "QR Code Scanner",
-          "Analytics"
-        ],
+        "technologies": ["Outdoor Screen", "QR Code Scanner", "Analytics"],
         "liveUrl": "https://www.little.africa/"
       },
       {
@@ -427,10 +386,7 @@
         "category": "web",
         "image": "projects/warka-website.png",
         "description": "Website development for Warka Academy",
-        "technologies": [
-          "WordPress",
-          "Custom Design"
-        ],
+        "technologies": ["WordPress", "Custom Design"],
         "liveUrl": "https://www.warkaacademy.com"
       },
       {
@@ -438,11 +394,7 @@
         "category": "web",
         "image": "projects/duratek-website.png",
         "description": "Website development and branding for Duratek Importer",
-        "technologies": [
-          "WordPress",
-          "Brand Identity",
-          "Logo Design"
-        ],
+        "technologies": ["WordPress", "Brand Identity", "Logo Design"],
         "liveUrl": "https://duratek-importer.com/"
       },
       {
@@ -450,11 +402,7 @@
         "category": "marketing",
         "image": "projects/dta.png",
         "description": "Sales marketing campaign for DTA",
-        "technologies": [
-          "Strategy",
-          "Digital Ads",
-          "Lead Generation"
-        ],
+        "technologies": ["Strategy", "Digital Ads", "Lead Generation"],
         "liveUrl": ""
       }
     ]
@@ -484,11 +432,7 @@
             "value": "4.5x"
           }
         ],
-        "services": [
-          "Brand Strategy",
-          "Digital Advertising",
-          "PR Campaign"
-        ]
+        "services": ["Brand Strategy", "Digital Advertising", "PR Campaign"]
       },
       {
         "client": "Abay Esdee Paints",

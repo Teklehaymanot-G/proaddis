@@ -3,9 +3,8 @@
 // Where the Express server (server/) is reachable. Override with VITE_API_URL.
 export const API_URL = (
   import.meta.env.VITE_API_URL ||
-  (import.meta.env.DEV
-    ? "http://localhost:5000"
-    : "https://contact-proaddis.amatiya.com")
+  "https://proaddis.dealstoaddis.com" ||
+  "http://localhost:5000"
 ).replace(/\/$/, "");
 
 // Files uploaded through the dashboard live on the API server;

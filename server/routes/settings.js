@@ -3,6 +3,7 @@ const auth = require("../lib/auth");
 const settings = require("../lib/settings");
 const sendEmail = require("../lib/email");
 const analytics = require("../lib/analytics");
+const templates = require("../lib/emailTemplates");
 
 const router = express.Router();
 
@@ -90,15 +91,20 @@ const readField = (field) => {
 router.put("/contact-form", async (req, res) => {
   const body = req.body || {};
 
-  const recipients = Array.isArray(body.recipients)
-    ? [...new Set(body.recipients.map((email) => text(email).toLowerCase()))].filter(Boolean)
-    : [];
-  const invalid = recipients.find((email) => !EMAIL_PATTERN.test(email));
+  const readEmails = (list) =>
+    Array.isArray(list)
+      ? [...new Set(list.map((email) => text(email).toLowerCase()))].filter(Boolean)
+      : [];
+
+  const recipients = readEmails(body.recipients);
+  const copyTo = readEmails(body.copyTo);
+  const invalid = [...recipients, ...copyTo].find((email) => !EMAIL_PATTERN.test(email));
   if (invalid) return fail(res, `"${invalid}" is not a valid email address`);
 
   const contactForm = {
     enabled: body.enabled !== false,
     recipients,
+    copyTo,
     subjectPrefix: text(body.subjectPrefix, 150) || settings.DEFAULTS.contactForm.subjectPrefix,
     successMessage:
       text(body.successMessage, 500) || settings.DEFAULTS.contactForm.successMessage,
@@ -120,6 +126,58 @@ router.put("/contact-form", async (req, res) => {
 
   await settings.set("contactForm", contactForm);
   res.json({ success: true, contactForm });
+});
+
+// What the emails look like, with example data. `type`: notification | autoReply
+router.post("/contact-form/preview", async (req, res) => {
+  const saved = await settings.getContactForm();
+  const sample = templates.SAMPLE_MESSAGE;
+
+  if (req.body?.type === "autoReply") {
+    // Preview what is typed in the form, even before it is saved
+    const subject = text(req.body.subject, 150) || saved.autoReply.subject;
+    const body = text(req.body.body, 5000) || saved.autoReply.body;
+    return res.json({
+      success: true,
+      subject,
+      html: templates.autoReply({
+        name: sample.name,
+        subject,
+        body: body.replace(/\{\{\s*name\s*\}\}/g, sample.name),
+      }).html,
+    });
+  }
+
+  const subjectPrefix = text(req.body?.subjectPrefix, 150) || saved.subjectPrefix;
+  res.json({
+    success: true,
+    subject: `${subjectPrefix} - ${sample.subject}`,
+    html: templates.contactNotification({ ...sample, createdAt: new Date() }).html,
+  });
+});
+
+// Sends the example notification to the saved addresses, to check delivery
+router.post("/contact-form/test", async (req, res) => {
+  const config = await settings.getContactForm();
+  const recipients = settings.getRecipients(config);
+
+  if (recipients.length === 0) {
+    return fail(res, "Add at least one address under “Send new messages to” and save first");
+  }
+
+  const sample = templates.SAMPLE_MESSAGE;
+  const result = await sendEmail({
+    to: recipients,
+    cc: config.copyTo.filter((address) => !recipients.includes(address)),
+    replyTo: req.user.email,
+    subject: `[Test] ${config.subjectPrefix} - ${sample.subject}`,
+    ...templates.contactNotification({ ...sample, createdAt: new Date() }),
+  });
+
+  if (!result.success) {
+    return res.status(502).json({ success: false, error: result.error });
+  }
+  res.json({ success: true, recipients, copyTo: config.copyTo });
 });
 
 // ---- Google Analytics ----

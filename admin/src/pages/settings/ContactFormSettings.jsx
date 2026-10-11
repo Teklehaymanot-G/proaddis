@@ -1,8 +1,8 @@
 // src/pages/settings/ContactFormSettings.jsx
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { App, Button, Checkbox, Form, Input, Select, Table } from "antd";
-import { SaveOutlined } from "@ant-design/icons";
+import { Alert, App, Button, Checkbox, Form, Input, Select, Space, Table } from "antd";
+import { EyeOutlined, SaveOutlined, SendOutlined } from "@ant-design/icons";
 import { api } from "../../api/client";
 import PageHeader from "../../components/PageHeader";
 import PageState from "../../components/PageState";
@@ -13,6 +13,7 @@ import {
   SwitchField,
 } from "../../components/FormLayout";
 import useSettings from "./useSettings";
+import EmailPreviewModal from "./EmailPreviewModal";
 
 const OPTIONAL_FIELDS = [
   { key: "phone", label: "Phone number" },
@@ -22,12 +23,34 @@ const OPTIONAL_FIELDS = [
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+const emailListRule = {
+  validator: (_, value = []) =>
+    value.every((email) => EMAIL_PATTERN.test(email))
+      ? Promise.resolve()
+      : Promise.reject(new Error("One of these is not a valid email address")),
+};
+
+// A box where several email addresses can be typed
+const EmailList = (props) => (
+  <Select
+    mode="tags"
+    open={false}
+    suffixIcon={null}
+    tokenSeparators={[",", " ", ";"]}
+    placeholder="name@example.com"
+    {...props}
+  />
+);
+
 const ContactFormSettings = () => {
   const { message } = App.useApp();
   const { settings, error, load, patch } = useSettings();
   const [form] = Form.useForm();
   const [saving, setSaving] = useState(false);
   const [dirty, setDirty] = useState(false);
+  const [preview, setPreview] = useState(null); // what the preview dialog shows
+  const [testing, setTesting] = useState(false);
+  const [testResult, setTestResult] = useState(null);
 
   const fields = Form.useWatch("fields", form);
   const autoReplyOn = Form.useWatch(["autoReply", "enabled"], form);
@@ -47,6 +70,28 @@ const ContactFormSettings = () => {
       message.error(saveError.message);
     } finally {
       setSaving(false);
+    }
+  };
+
+  // Sends the example notification to the saved addresses
+  const sendTest = async () => {
+    setTesting(true);
+    setTestResult(null);
+    try {
+      const result = await api.testContactEmail();
+      const everyone = [...result.recipients, ...result.copyTo];
+      setTestResult({
+        type: "success",
+        message: `Test email sent to ${everyone.join(", ")}. Check the inbox (and the spam folder).`,
+      });
+    } catch (testError) {
+      setTestResult({
+        type: "error",
+        message: "The test email could not be sent",
+        description: testError.message,
+      });
+    } finally {
+      setTesting(false);
     }
   };
 
@@ -158,22 +203,17 @@ const ContactFormSettings = () => {
                       ` If empty, ${settings.envRecipient} (from the server's .env file) is used.`}
                   </>
                 }
-                rules={[
-                  {
-                    validator: (_, value = []) =>
-                      value.every((email) => EMAIL_PATTERN.test(email))
-                        ? Promise.resolve()
-                        : Promise.reject(new Error("One of these is not a valid email address")),
-                  },
-                ]}
+                rules={[emailListRule]}
               >
-                <Select
-                  mode="tags"
-                  open={false}
-                  suffixIcon={null}
-                  tokenSeparators={[",", " ", ";"]}
-                  placeholder="name@example.com"
-                />
+                <EmailList />
+              </Form.Item>
+              <Form.Item
+                name="copyTo"
+                label="Also send a copy to"
+                extra="These addresses receive a copy (CC) of every message, for example a manager or a shared sales inbox."
+                rules={[emailListRule]}
+              >
+                <EmailList />
               </Form.Item>
               <Form.Item
                 name="subjectPrefix"
@@ -182,6 +222,37 @@ const ContactFormSettings = () => {
               >
                 <Input maxLength={150} />
               </Form.Item>
+
+              <Space wrap>
+                <Button
+                  icon={<EyeOutlined />}
+                  onClick={() =>
+                    setPreview({
+                      type: "notification",
+                      subjectPrefix: form.getFieldValue("subjectPrefix"),
+                    })
+                  }
+                >
+                  Preview email
+                </Button>
+                <Button
+                  icon={<SendOutlined />}
+                  loading={testing}
+                  disabled={dirty}
+                  onClick={sendTest}
+                >
+                  Send a test email
+                </Button>
+              </Space>
+              {dirty && (
+                <Alert
+                  type="info"
+                  showIcon
+                  message="Save your changes first: the test goes to the saved addresses."
+                  style={{ marginTop: 16 }}
+                />
+              )}
+              {testResult && <Alert showIcon {...testResult} style={{ marginTop: 16 }} />}
             </FormSection>
 
             <FormSection
@@ -213,6 +284,18 @@ const ContactFormSettings = () => {
                   disabled={!autoReplyOn}
                 />
               </Form.Item>
+              <Button
+                icon={<EyeOutlined />}
+                onClick={() =>
+                  setPreview({
+                    type: "autoReply",
+                    subject: form.getFieldValue(["autoReply", "subject"]),
+                    body: form.getFieldValue(["autoReply", "body"]),
+                  })
+                }
+              >
+                Preview automatic reply
+              </Button>
             </FormSection>
 
             <FormActions hint={dirty ? "You have unsaved changes" : "All changes saved"}>
@@ -229,6 +312,8 @@ const ContactFormSettings = () => {
           </FormPanel>
         </Form>
       </PageState>
+
+      <EmailPreviewModal request={preview} onClose={() => setPreview(null)} />
     </>
   );
 };
